@@ -1,0 +1,38 @@
+<div id="padre">
+    <div id="hijo1">
+        <div id="rectangulo">
+            <div id="contenedor-titulo">
+                <h1 id="titulo">
+                    FINANCE
+                </h1>
+            </div>
+            <div id="contenedor-descripcion">
+                <h2 id="descripcion">
+                    Login now and start counting.
+                </h2>
+            </div> 
+            <mat-icon style="color: white;">keyboard_arrow_down</mat-icon>
+        </div>
+    </div>
+    <div id="hijo2">
+        <img id="logo" src="../../../../assets/img/BLUE OCEAN.png" alt="">
+        <form>
+
+            <!-- Email -->
+            <div class="campos">
+                <input matInput type="email" name ="email" [(ngModel)]="email" required placeholder="Email">
+            </div>
+
+            <!-- Password -->
+            <div class="campos">
+                <input type="password" name ="password" [(ngModel)]="password" required placeholder="Password">
+            </div>
+
+            <div id="contenedor-btn">
+                <button type="button" class="btn" (click)="login()">Login</button>
+                <h2>Or</h2>
+                <button type="button" class="btn" routerLink="/register">Register</button>
+            </div>
+        </form>
+    </div>
+</div>

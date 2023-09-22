@@ -1,0 +1,116 @@
+<div id="padre">
+    <div id="hijoHeader">
+        <div class="header">
+            <div id="avatar">
+
+            </div>
+        </div>
+        <div class="header">
+            <img id="logo" src="../../../../../assets/img/BLUE OCEAN.png" alt="">
+        </div>
+        <div class="header">
+
+        </div>
+    </div>
+    <div id="hijo1">
+
+        <div id="titulo" class="secciones" (click)="home()">
+            <div class="icono">
+                <img src="../../../../../assets/img/BLUE OCEAN.png" alt="" width="80%">
+            </div>
+            <div class="texto">
+                <h1 id="finance">FINANCE</h1>
+            </div>
+        </div>
+
+        <div class="secciones" style="background-color: #D9D9D9" (click)="openMenu()">
+            <div class="icono">
+                <img src="../../../../../assets/img/icons/person.png" alt="" width="80%">
+            </div>
+            <div class="texto">
+                <h1>Users</h1>
+            </div>
+        </div>
+
+        <div class="secciones" (click)="openOtherMenu()">
+            <div class="icono">
+                <img src="../../../../../assets/img/icons/invoice.png" alt="" width="70%">
+            </div>
+            <div class="texto">
+                <h1>Bills</h1>
+            </div>
+        </div>
+
+        <div class="secciones" id="footer">
+            <div class="icono">
+                <div id="avatar">
+
+                </div>
+            </div>
+            <div class="texto">
+                <h1 id="username">{{userSession}}</h1>
+            </div>
+        </div>
+
+    </div>
+    <div id="hijo2">
+        <div id="filtros">
+
+            <!-- USERNAME -->
+            <select name="username" [(ngModel)]="username">
+                <option value="" selected disabled>Username</option>
+                <option value="">All</option>
+                <option *ngFor="let user of arregloUsuarios" [value]="user">{{user}}</option>
+            </select>
+
+            <!-- email -->
+            <select name="username" [(ngModel)]="email">
+                <option value="" selected disabled>Email</option>
+                <option value="">All</option>
+                <option *ngFor="let user of arregloEmails" [value]="user">{{user}}</option>
+            </select>
+
+            <!-- MIN - MAX (FACTURAS) -->
+            <input type="number" placeholder="Min - Facturas" [(ngModel)]="facturas_min">
+            <input type="number" placeholder="Max - Facturas" [(ngModel)]="facturas_max">
+
+            <!-- MIN - MAX (TOTAL) -->
+            <input type="number" placeholder="Min - Total" [(ngModel)]="total_min">
+            <input type="number" placeholder="Max - Total" [(ngModel)]="total_max">
+
+            <!-- ORDER BY -->
+            <select name="nit_emisor" [(ngModel)]="orderBy">
+                <option [value]="" selected disabled >Order By</option>
+                <option value="">All</option>
+                <option value="Facturas">Facturas</option>
+                <option value="Total">Total</option>
+            </select>
+
+            <!-- ORDER -->
+            <select name="order" [(ngModel)]="order">
+                <option [value]="" selected disabled >Order</option>
+                <option value="Descend">Descend</option>
+                <option value="Ascend">Ascend</option>
+            </select>
+
+            <button (click)="showData()">Search</button>
+
+        </div>
+        <div id="lista">
+            <table>
+                <tr>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>No. Facturas</th>
+                  <th>Total Gastado</th>
+                </tr>
+                <tr *ngFor="let user of usuarios">
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.facturas}}</td>
+                    <td>{{user.total}}</td>
+                </tr>
+              </table>
+        </div>
+    </div>
+</div>

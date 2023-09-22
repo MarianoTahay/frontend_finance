@@ -1,0 +1,113 @@
+<div id="padre">
+    <div id="hijoHeader">
+        <div class="header">
+            <div id="avatar">
+
+            </div>
+        </div>
+        <div class="header">
+            <img id="logo" src="../../../../../assets/img/BLUE OCEAN.png" alt="">
+        </div>
+        <div class="header">
+
+        </div>
+    </div>
+    <div id="hijo1">
+
+        <div id="titulo" class="secciones" (click)="home()">
+            <div class="icono">
+                <img src="../../../../../assets/img/BLUE OCEAN.png" alt="" width="80%">
+            </div>
+            <div class="texto">
+                <h1 id="finance">FINANCE</h1>
+            </div>
+        </div>
+
+        <div class="secciones" (click)="openMenu()">
+            <div class="icono">
+                <img src="../../../../../assets/img/icons/person.png" alt="" width="80%">
+            </div>
+            <div class="texto">
+                <h1>Users</h1>
+            </div>
+        </div>
+
+        <div class="secciones" style="background-color: #D9D9D9" (click)="openOtherMenu()">
+            <div class="icono">
+                <img src="../../../../../assets/img/icons/invoice.png" alt="" width="70%">
+            </div>
+            <div class="texto">
+                <h1>Bills</h1>
+            </div>
+        </div>
+
+        <div class="secciones" id="footer">
+            <div class="icono">
+                <div id="avatar">
+
+                </div>
+            </div>
+            <div class="texto">
+                <h1 id="username">{{userSession}}</h1>
+            </div>
+        </div>
+
+    </div>
+    <div id="hijo2">
+        <div id="filtros">
+
+            <!-- USERNAME -->
+            <select name="username" [(ngModel)]="username" *ngIf="userRol == 'contador'">
+                <option value="" selected disabled>Username</option>
+                <option value="">All</option>
+                <option *ngFor="let user of usuariosFilter" [value]="user">{{user}}</option>
+            </select>
+
+            <!-- DATE -->
+            <input type="date" [(ngModel)]="date_start">
+            <input type="date" [(ngModel)]="date_finish">
+
+            <!-- MIN - MAX -->
+            <input type="number" placeholder="Min" [(ngModel)]="min">
+            <input type="number" placeholder="Max" [(ngModel)]="max">
+
+            <!-- COMPANIE -->
+            <select name="nit_emisor" [(ngModel)]="nit_emisor">
+                <option value=0 selected disabled>Emisor</option>
+                <option value=0 >All</option>
+                <option *ngFor="let empresa of empresas" [value]="empresa.nit">{{empresa.nombre_empresa}}</option>
+            </select>
+
+            <!-- ORDER -->
+            <select name="order" [(ngModel)]="order">
+                <option [value]="" selected disabled >Order</option>
+                <option value="Descend">Descend</option>
+                <option value="Ascend">Ascend</option>
+            </select>
+
+            <button (click)="showData()">Search</button>
+
+        </div>
+        <div id="lista">
+            <table>
+                <tr>
+                  <th>Username</th>
+                  <th>DTE</th>
+                  <th>Serie</th>
+                  <th>Date</th>
+                  <th>Emisor</th>
+                  <th>Total</th>
+                </tr>
+                <tr *ngFor="let item of facturas">
+                  <td>{{item.username}}</td>
+                  <td>{{item.dte}}</td>
+                  <td>{{item.serie}}</td>
+                  <td>{{item.fecha_emision}}</td>
+                  <td>{{item.nit_emisor}}</td>
+                  <td>{{item.monto}}</td>
+                </tr>
+              </table>
+            
+        </div>
+    </div>
+</div>
