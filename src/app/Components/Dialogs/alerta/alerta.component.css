@@ -35,3 +35,8 @@ button{
     color: white;
     background-color: #ff3838;
 }
+
+button:hover{
+    opacity: 80%;
+    cursor: pointer;
+}

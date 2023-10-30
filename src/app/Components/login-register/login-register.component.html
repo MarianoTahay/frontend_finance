@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+
+    <div id="contenedor">
+
+        <div class="hijo1" *ngIf="login_view">
+
+            <p id="logo">
+                Finance
+            </p>
+
+            <p id="slogan">
+                Login now and start counting
+            </p>
+
+        </div>
+
+        <div class="hijo2" *ngIf="login_view">
+
+            <img src="./../../../assets/img/BLUE OCEAN.png" alt="" width="5%">
+
+            <div id="form">
+
+                <input type="text" placeholder="E-mail" [(ngModel)]="email">
+
+                <input type="password" placeholder="Password" [(ngModel)]="password">
+
+                <button style="background-color: #6897d4;" (click)="login()">
+                    Login
+                </button>
+
+                <p>
+                    or
+                </p>
+
+                <button style="background-color: #6897d4;" (click)="mostrarRegister()">
+                    Register
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="hijo1" *ngIf="register_view" style="background-color: white;">
+
+            <img src="./../../../assets/img/BLUE OCEAN.png" alt="" width="5%" style="left: 0; top: 0;">
+
+            <div id="form">
+
+                <input type="text" placeholder="Nombre" [(ngModel)]="nombre" (click)="hideSpecs()">
+
+                <input type="text" placeholder="Apellido" [(ngModel)]="apellido" (click)="hideSpecs()">
+                
+                <input type="text" placeholder="Username" [(ngModel)]="username" (input)="usernameValidation($event)" [ngStyle]="{'border-color': usernameBorderColor}" (click)="mostrarUserSpecs()">
+
+                <div *ngIf="usernameVal" class="spec">
+                    - Debe contener entre 6 a 12 caracteres
+                    <br>
+                    - Por lo menos una mayuscula
+                    <br>
+                    - Mas de una minuscula
+                    <br>
+                    - Por lo menos un numero
+                </div>
+
+                <input type="text" placeholder="E-mail" [(ngModel)]="email" (input)="emailValidation($event)" [ngStyle]="{'border-color': emailBorderColor}" (click)="hideSpecs()">
+
+                <input type="password" placeholder="Password" [(ngModel)]="password" (input)="passwordValidation($event)" [ngStyle]="{'border-color': passwordBorderColor}" (click)="mostrarPasswordSpecs()">
+
+                <div *ngIf="passwordVal" class="spec">
+                    - Debe contener entre 6 a 12 caracteres
+                    <br>
+                    - Por lo menos una mayuscula
+                    <br>
+                    - Por lo menos un caracter especial (_, $, !, &)
+                </div>
+
+                <button style="background-color: #6897d4;" (click)="register()">
+                    Register
+                </button>
+
+                <p>
+            
+                </p>
+
+                <button style="background-color: #6897d4;" (click)="mostrarLogin()" (click)="hideSpecs()">
+                    Back
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="hijo2" *ngIf="register_view" style="background-color: #4A88D9; gap: 7%;">
+            <p id="logo">
+                Finance
+            </p>
+
+            <p id="slogan">
+                Register now and start counting
+            </p>
+        </div>
+
+    </div>
+    
+</body>
+</html>

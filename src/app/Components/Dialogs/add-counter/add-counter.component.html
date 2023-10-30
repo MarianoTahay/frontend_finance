@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+
+    <div id="contenedor">
+
+
+        <div id="header">
+            Seleccione a un contador
+        </div>
+
+        <div id="contenido">
+
+            <div id="contador">
+
+                <select [(ngModel)]="contadorSeleccionado">
+                    <option value="" selected>Contador</option>
+                    <option *ngFor="let data of profiles" [ngValue]="data.id_usuario">{{data.username}}</option>
+                </select>
+    
+            </div>
+
+            <div id="contexto">
+                <b>
+                    Advertencia:
+                </b>
+                <br>
+                <br>
+                Al momento de agregar a otro usuario como contador, esa persona podra ser capaz de:
+                <br>
+                <br>
+                - Ver todas sus facturas
+                <br>
+                - Ver su informacion personal
+                <br>
+                - Poder subir reportes a su cuenta
+                <br>
+                - Y ser la unica persona que pueda administrar sus facturas
+                <br>
+                <br>
+                A partir de este punto usted solo sera capaz de subir fotos de sus facturas y por ende
+                <br>
+                su nuevo rol en esta cuenta pasara de ser de usuairo a cliente.
+            </div>
+
+        </div>
+
+        <div id="acciones">
+
+            <button style="background-color: rgb(81, 178, 81);" (click)="addContador()">
+                Agregar
+            </button>
+
+            <button style="background-color: rgb(255, 85, 85);" mat-dialog-close>
+                Cancelar
+            </button>
+
+        </div>
+
+    </div>
+    
+</body>
+</html>

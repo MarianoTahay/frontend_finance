@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+</head>
+<body>
+
+	<div id="contenedor">
+
+		<div id="header">
+
+			<img width="5%" src="./../../../assets/img/BLUE OCEAN.png" alt="">
+
+			<button id="notificaciones">
+				<span class="material-symbols-outlined">
+					notifications
+				</span>
+			</button>
+
+		</div>
+
+		<div id="tabs">
+
+			<div class="opciones" (click)="mostrarReportes()">
+
+                <span class="material-symbols-outlined">
+                    overview
+                </span>
+
+                Reportes
+            </div>
+
+			<div class="opciones" (click)="mostrarUsuarios()" *ngIf="defaultProfile.rol == 'contador'">
+
+                <span class="material-symbols-outlined">
+                    group
+                </span>
+
+                Usuarios
+            </div>
+
+			<div class="opciones" (click)="mostrarFacturas()">
+
+                <span class="material-symbols-outlined">
+                    receipt_long
+                </span>
+
+                Facturas
+            </div>
+
+			<div class="opciones" (click)="mostrarListaContadores()" *ngIf="defaultProfile.rol == 'usuario'">
+
+                <span class="material-symbols-outlined">
+                    supervisor_account
+                </span>
+
+                Agregar contador
+            </div>
+
+			<div class="opciones" (click)="profile()">
+
+                <span class="material-symbols-outlined">
+                    person
+                </span>
+
+                {{defaultProfile.username}}
+            </div>
+	
+		</div>
+
+		<!-- PAGINA REPORTES  -->
+
+		<div class="contenido" *ngIf="reportes_view">
+		
+		</div>
+
+		<!-- PAGINA PARA LISTAR USUARIOS -->
+
+		<div class="contenido" *ngIf="usuarios_view">
+
+			<div class="filtros">
+        
+				<!-- USERNAME -->
+				<div class="filtro">
+                    <input type="text" placeholder="Username" [(ngModel)]="username_Filter">
+                </div>
+	
+				<!-- email -->
+				<div class="filtro">
+                    <input type="number" placeholder="Email" [(ngModel)]="email">
+                </div>
+	
+				<!-- MIN - MAX (FACTURAS) -->
+				<div class="filtro">
+                    <input type="number" placeholder="Min - Facturas" [(ngModel)]="facturas_min">
+                </div>
+
+				<div class="filtro">
+                    <input type="number" placeholder="Max - Facturas" [(ngModel)]="facturas_max">
+                </div>
+				
+				<!-- MIN - MAX (TOTAL) -->
+				<div class="filtro">
+                    <input type="number" placeholder="Min - Total" [(ngModel)]="total_min">
+                </div>
+
+				<div class="filtro">
+                    <input type="number" placeholder="Max - Total" [(ngModel)]="total_max">
+                </div>
+	
+				<!-- ORDER BY -->
+				<div class="filtro">
+					<select [(ngModel)]="orderBy">
+						<option [value]="" selected disabled >Order By</option>
+						<option value="">All</option>
+						<option value="Facturas">Facturas</option>
+						<option value="Total">Total</option>
+					</select>
+				</div>
+	
+				<!-- ORDER -->
+				<div class="filtro">
+					<select [(ngModel)]="order">
+						<option [value]="" selected disabled >Order</option>
+						<option value="Descend">Descend</option>
+						<option value="Ascend">Ascend</option>
+					</select>
+				</div>
+
+				<div class="filtro">
+					<button  style="background-color: rgb(81, 178, 81);" (click)="showUsers()">Search</button>
+				</div>
+	
+			</div>
+
+			<div class="lista">
+				
+				<div id="usuario" *ngFor="let user of usuarios">
+
+					<div id="avatar">
+						<div id="temp">
+
+						</div>
+					</div>
+
+					<div id="dataUsuarios">
+						<p>
+                            <b>Nombre:</b> {{user.username}}
+                        </p>
+                        <p>
+                            <b>Email:</b> {{user.email}}
+                        </p>
+                        <p>
+                            <b>No.Facturas:</b> {{user.facturas}}
+                        </p>
+						<p>
+							<b>Total Gastado:</b> Q.{{user.total}}
+						</p>
+					</div>
+
+					<div id="acciones">
+						<button style="background-color: #dc3545; width: 30%;">
+							<span class="material-symbols-outlined">
+								delete
+							</span>
+						</button>
+
+						<button style="background-color: #48b8ce; width: 30%;">
+							<span class="material-symbols-outlined">
+								info
+							</span>
+						</button>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+		<!-- PAGINA PARA LISTAR LAS FACTURAS -->
+
+		<div class="contenido" *ngIf="facturas_view">
+
+			<div class="filtros">
+    
+                <!-- USERNAME -->
+				<div class="filtro" *ngIf="defaultProfile.rol == 'contador'">
+                    <input type="text" placeholder="Username" [(ngModel)]="username_Filter">
+                </div>
+    
+                <!-- DATE -->
+				<div class="filtro">
+                    <input type="date" [(ngModel)]="date_start">
+                </div>
+
+				<div class="filtro">
+                    <input type="date" [(ngModel)]="date_finish">
+                </div>
+
+                <!-- MIN - MAX -->
+				<div class="filtro">
+                    <input type="number" placeholder="Min" [(ngModel)]="min">
+                </div>
+
+				<div class="filtro">
+                    <input type="number" placeholder="Max" [(ngModel)]="max">
+                </div>
+    
+                <!-- COMPANIE -->
+				<div class="filtro">
+					<select [(ngModel)]="nit_emisor">
+						<option value=0 selected disabled>Emisor</option>
+						<option value=0 >All</option>
+						<option *ngFor="let empresa of empresas" [value]="empresa.nit">{{empresa.nombre_empresa}}</option>
+					</select>
+				</div>
+    
+                <!-- ORDER -->
+				<div class="filtro">
+					<select [(ngModel)]="order">
+						<option [value]="" selected disabled >Order</option>
+						<option value="Descend">Descend</option>
+						<option value="Ascend">Ascend</option>
+					</select>
+				</div>
+
+				<div class="filtro">
+					<button  style="background-color: rgb(81, 178, 81);" (click)="showBills()">Search</button>
+				</div>
+
+				<div class="filtro">
+					<button style="background-color: rgb(144, 136, 209);" (click)="addBill()">Agregar</button>
+				</div>
+    
+            </div>
+
+            <div class="lista">
+
+				<div id="facturas" *ngFor="let item of facturas">
+
+					<div id="dataFacturas">
+
+						<p>
+							<b>Username:</b> {{item.username}} 
+						</p>
+
+						<p>
+							<b>DTE:</b> {{item.dte}} - <b>Serie:</b> {{item.serie}}
+						</p>
+
+						<p>
+							<b>Fecha:</b> {{item.fecha_emision}}
+						</p>
+
+						<p>
+							<b>Emisor:</b> {{item.nit_emisor}}
+						</p>
+
+					</div>
+
+					<div id="monto">
+						<p>
+							Q.{{item.monto}}
+						</p>
+					</div>
+
+					<div id="acciones">
+						<button style="background-color: #dc3545; width: 30%;">
+							<span class="material-symbols-outlined">
+								delete
+							</span>
+						</button>
+
+						<button style="background-color: #48b8ce; width: 30%;">
+							<span class="material-symbols-outlined">
+								edit
+							</span>
+						</button>
+					</div>
+
+				</div>
+
+            </div>
+
+			
+
+		</div>
+
+	</div>
+
+</body>
+</html>

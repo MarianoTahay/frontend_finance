@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+</head>
+    <body>
+        <div id="padre">
+            <div id="titulo">
+                Add User
+            </div>
+            <div id="formulario">
+
+                <!-- NOMBRE -->
+                <div class="input-group flex-nowrap" style="width: 70%">
+                    <span class="input-group-text" id="addon-wrapping">Name</span>
+                    <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="addon-wrapping" name="name" [(ngModel)]="name">
+                </div>
+
+                <!-- APELLIDO -->
+                <div class="input-group flex-nowrap" style="width: 70%">
+                    <span class="input-group-text" id="addon-wrapping">Last name</span>
+                    <input type="text" class="form-control" placeholder="Lastname" aria-label="Lastname" aria-describedby="addon-wrapping" name="last_name" [(ngModel)]="last_name">
+                </div>
+
+                <!-- USERNAME -->
+                <div class="input-group flex-nowrap" style="width: 70%">
+                    <span class="input-group-text" id="addon-wrapping">@</span>
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping" name="username" [(ngModel)]="username">
+                </div>
+
+                <!-- EMAIL -->
+                <div class="input-group flex-nowrap" style="width: 70%">
+                    <span class="input-group-text" id="addon-wrapping">E-mail</span>
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Email" aria-describedby="addon-wrapping" name="email" [(ngModel)]="email">
+                </div>
+
+                <!-- CONTRASEÑA -->
+                <div class="input-group flex-nowrap" style="width: 70%">
+                    <span class="input-group-text" id="addon-wrapping">Password</span>
+                    <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="addon-wrapping" name="password" [(ngModel)]="password">
+                </div>
+
+                <!-- CONFIRM CONTRASEÑA -->
+                <div class="input-group flex-nowrap" style="width: 70%">
+                    <span class="input-group-text" id="addon-wrapping">Confirm password</span>
+                    <input type="password" class="form-control" placeholder="Confirm Password" aria-label="Confirm Password" aria-describedby="addon-wrapping" name="password" [(ngModel)]="confirm_password">
+                </div>
+        
+            </div>
+            <div id="submit">
+                <button type="button" class="btn btn-success" (click)="addUser()">ADD</button>
+            </div>
+        </div>
+    </body>
+</html>

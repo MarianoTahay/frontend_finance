@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+    <body>
+        <div id="padre">
+
+            <div id="avatar">
+
+                <div id="img">
+                    
+                </div>
+                {{defaultProfile.rol}}
+
+            </div>
+
+            <div id="info">
+
+                <div class="label">
+                    Nombre:
+                </div>
+                <input type="text" name="nombre" [(ngModel)]="nombre" *ngIf="save" style="border: 2px solid #48b8ce;">
+                <input type="text" name="nombre" [(ngModel)]="nombre" readonly *ngIf="!save">
+
+                <div class="label">
+                    Apellido:
+                </div>
+                <input type="text" name="apellido" [(ngModel)]="apellido" *ngIf="save" style="border: 2px solid #48b8ce;">
+                <input type="text" name="apellido" [(ngModel)]="apellido" readonly *ngIf="!save">
+
+                <div class="label">
+                    Correo:
+                </div>
+                <input type="text" name="correo" [(ngModel)]="correo" readonly>
+
+            </div>
+
+            <div id="actions">
+                <button style="background-color: rgb(255, 85, 85);" (click)="logout()">Logout</button>
+                <button  style="background-color: #48b8ce;" (click)="mostrarSave()" *ngIf="!save">
+                    <span class="material-symbols-outlined">
+                        edit
+                    </span>
+                </button>
+                <button  style="background-color: rgb(81, 178, 81);" *ngIf="save">
+                    <span class="material-symbols-outlined">
+                        save
+                    </span>
+                </button>
+            </div>
+               
+        </div>
+    </body>
+</html>

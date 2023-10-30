@@ -1,22 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import {MatDialogModule} from '@angular/material/dialog';
-import { BackendService } from 'src/app/services/backend.service';
+
+//IMPORTS DE SERVICIOS
+import { DialogsService } from 'src/app/services/dialogs.service';
 
 @Component({
   selector: 'app-alerta',
   templateUrl: './alerta.component.html',
   styleUrls: ['./alerta.component.css'],
-  standalone: true,
-  imports: [MatDialogModule]
 })
 export class AlertaComponent {
 
   error: string = ""
 
-  constructor(private backend: BackendService){}
+  constructor(private mensaje: DialogsService){}
 
   ngOnInit(): void{
-    this.backend.error$.subscribe((error) => {
+    this.mensaje.error$.subscribe((error) => {
       this.error = error;
     });
   }

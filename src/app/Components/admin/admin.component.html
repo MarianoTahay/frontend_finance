@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+
+    <div id="contenedor">
+
+
+        <div id="header">
+
+            <div id="logo">
+
+                <img src="./../../../assets/img/BLUE OCEAN.png" width="20%">
+
+                <p>
+                    Finance
+                </p>
+
+            </div>
+
+            <div id="info">
+
+                <div class="manager">
+
+                    CPU:
+
+                    <p>
+                        60%
+                    </p>
+
+                </div>
+
+                <div class="manager">
+
+                    MEMORY:
+
+                    <p>
+                        2GB
+                    </p>
+
+                </div>
+
+                <div class="manager">
+
+                    DATA:
+
+                    <p>
+                        250MB
+                    </p>
+
+                </div>
+
+                <div class="manager">
+
+                    REQUESTS:
+
+                    <p>
+                        10/s
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="body">
+
+            <div id="side">
+
+                <div class="tab" (click)="mostrarDashboard()">
+
+                    <span class="material-symbols-outlined">
+                        dashboard
+                    </span>
+
+                    Dashboard
+
+                </div>
+
+                <div class="tab" (click)="mostrarUsers()">
+
+                    <span class="material-symbols-outlined">
+                        group
+                    </span>
+
+                    Usuarios
+
+                </div>
+
+                <div class="tab" (click)="mostrarEmpresas()">
+
+                    <span class="material-symbols-outlined">
+                        storefront
+                    </span>
+
+                    Empresas
+
+                </div>
+
+                <div class="tab" (click)="mostrarSql()">
+
+                    <span class="material-symbols-outlined">
+                        database
+                    </span>
+
+                    SQL
+
+                </div>
+
+            </div>
+    
+            <div class="content" *ngIf="dashboard_view">
+
+                dash
+    
+            </div>
+
+            <div class="content" *ngIf="users_view">
+
+                users
+    
+            </div>
+
+            <div class="content" *ngIf="empresas_view">
+
+                empresas
+    
+            </div>
+
+            <div class="content" *ngIf="sql_view">
+
+                sql
+    
+            </div>
+
+        </div>
+
+    </div>
+    
+</body>
+</html>

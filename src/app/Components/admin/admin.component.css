@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Knewave&family=Poppins:wght@100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap');
+
+#contenedor{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#header{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    gap: 7%;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgb(228, 227, 227);
+}
+
+#logo{
+    width: 30%;
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#logo p{
+    color: #4A88D9;
+    font-family: 'Knewave', cursive;
+    font-size: 4vw;
+}
+
+#info{
+    width: 60%;
+    height: 70%;
+    display: flex;
+    gap: 2%;
+    justify-content: center;
+    align-items: center;
+}
+
+.manager{
+    width: 20%;
+    height: 100%;
+    display: flex;
+    gap: 10%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    font-size: 1vw;
+    color: rgb(95, 95, 95);
+    border: 1px solid rgb(210, 210, 210);
+}
+
+.manager p{
+    color: rgb(95, 95, 95);
+    font-size: 2vw;
+}
+
+.manager:hover{
+    cursor: pointer;
+    scale: 1.01;
+}
+
+#body{
+    width: 100%;
+    height: 80%;
+    display: flex;
+}
+
+#side{
+    width: 15%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid rgb(228, 227, 227);
+}
+
+.tab{
+    width: 80%;
+    height: 10%;
+    display: flex;
+    gap: 2%;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size:1.5vw;
+}
+
+.tab:hover{
+    opacity: 80%;
+    cursor: pointer;
+    scale: 1.01;
+}
+
+.material-symbols-outlined{
+    font-size: 2vw;
+    color: grey;
+}
+
+.content{
+    width: 85%;
+    height: 100%;
+    display: flex;
+}
