@@ -61,7 +61,7 @@ export class ProfileComponent {
   }
 
   logout(){
-    this.userService.userLogout(this.defaultProfile);
+    this.userService.userStatus("Nlogged", this.defaultProfile.email);
     this.router.navigate(['']);
     this.dialog.closeAll();
   }

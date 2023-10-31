@@ -55,7 +55,7 @@ export class AddCounterComponent {
   }
 
   addContador(){
-    this.userService.addContador(Number(this.contadorSeleccionado), this.defaultProfile.id_usuario);
+    this.userService.addContador(Number(this.contadorSeleccionado), this.defaultProfile.id_usuario, this.defaultProfile.email);
   }
 
 }

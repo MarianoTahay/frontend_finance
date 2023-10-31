@@ -64,7 +64,7 @@ export class UsuariosService {
 
     axios({
       method: 'post',
-      url: 'http://localhost:3000/token',
+      url: 'http://localhost:3000/decodeToken',
       data: {
         token: token
       }
@@ -81,6 +81,26 @@ export class UsuariosService {
       }
     })
 
+  }
+
+  //Creamos la sesion del usuario
+  setUser(email: string){
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/token',
+      data: {
+        email: email
+      }
+    }).then((response) => {
+      if(response.data.status == 0){
+        console.log(response.data.mensaje);
+      }
+      else{
+        console.log(response.data.mensaje)
+        localStorage.setItem('token', response.data.token);
+        this.locateUser();
+      }
+    })
   }
 
   //Logear a un usuario
@@ -101,16 +121,15 @@ export class UsuariosService {
         });
       }
       else{
-        localStorage.setItem('token', response.data.token);
 
-        if(response.data.values == 'logged'){
+        if(response.data.status == 'logged'){
           this.alerta.errorSubject.next("Sesion ya iniciada");
           this.dialog.open(AlertaComponent, {
             width: '30%',
             height: '30%'
           });
         }
-        else if(response.data.values != 'activa'){
+        else if(response.data.cuenta != 'activa'){
           this.alerta.errorSubject.next("Esta cuenta fue eliminada");
           this.dialog.open(AlertaComponent, {
             width: '30%',
@@ -123,27 +142,31 @@ export class UsuariosService {
             width: '30%',
             height: '30%'
           });
-          this.locateUser();
+          this.userStatus("logged", email);
+          console.log(email);
+          this.setUser(email);
           this.router.navigate(['contador-page']);
         }
+
       }
     })
   }
 
-  //Cerra la sesion del usuario
-  userLogout(profile: Profiles){
+  //Cambiar el status del usuario
+  userStatus(type: string, email: string){
     axios({
       method: 'post',
-      url: 'http://localhost:3000/logout',
+      url: 'http://localhost:3000/changeLogged',
       data: {
-        userSession: profile
+        type: type,
+        email: email
       }
     }).then((response) => {
       if(response.data.status == 0){
-        console.log(response.data.mensaje);
+        console.log(response.data.mensaje)
       }
       else{
-        console.log(response.data.mensaje);
+        console.log(response.data.mensaje)
       }
     })
   }
@@ -244,7 +267,7 @@ export class UsuariosService {
   }
 
   //Los usuarios agragan a un contador
-  addContador(id_contador: number, id_usuario: number){
+  addContador(id_contador: number, id_usuario: number, email: string){
     axios({
       method: 'post',
       url: 'http://localhost:3000/addContador',
@@ -266,7 +289,7 @@ export class UsuariosService {
           width: '30%',
           height: '30%'
         });
-        location.reload();
+        this.setUser(email);
       }
     })
   }
