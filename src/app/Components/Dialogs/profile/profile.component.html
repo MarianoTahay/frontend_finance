@@ -9,9 +9,15 @@
 
             <div id="avatar">
 
-                <div id="img">
-                    
+                <div id="img" *ngIf="!save" style="cursor: pointer;">
+                    <img src="{{imagePath}}" width="100%" style="overflow: hidden; border-radius: 50%;">
                 </div>
+
+                <label for="file-upload" class="custom-file-upload" *ngIf="save">
+                    <img src="{{imagePath}}" width="100%" style="overflow: hidden; border-radius: 50%;">
+                </label>
+                <input id="file-upload" type="file" (change)="uploadProfile($event)" single/>
+                
                 {{defaultProfile.rol}}
 
             </div>
@@ -22,18 +28,19 @@
                     Nombre:
                 </div>
                 <input type="text" name="nombre" [(ngModel)]="nombre" *ngIf="save" style="border: 2px solid #48b8ce;">
-                <input type="text" name="nombre" [(ngModel)]="nombre" readonly *ngIf="!save">
+                <input type="text" name="nombre" [(ngModel)]="nombre" readonly *ngIf="!save" style="cursor: pointer;">
 
                 <div class="label">
                     Apellido:
                 </div>
                 <input type="text" name="apellido" [(ngModel)]="apellido" *ngIf="save" style="border: 2px solid #48b8ce;">
-                <input type="text" name="apellido" [(ngModel)]="apellido" readonly *ngIf="!save">
+                <input type="text" name="apellido" [(ngModel)]="apellido" readonly *ngIf="!save" style="cursor: pointer;">
 
                 <div class="label">
                     Correo:
                 </div>
-                <input type="text" name="correo" [(ngModel)]="correo" readonly>
+                <input type="text" name="correo" [(ngModel)]="correo" *ngIf="save" style="border: 2px solid #48b8ce;">
+                <input type="text" name="correo" [(ngModel)]="correo" readonly *ngIf="!save" style="cursor: pointer;">
 
             </div>
 

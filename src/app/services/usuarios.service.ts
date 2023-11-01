@@ -62,24 +62,31 @@ export class UsuariosService {
 
     const token = localStorage.getItem('token');
 
-    axios({
-      method: 'post',
-      url: 'http://localhost:3000/decodeToken',
-      data: {
-        token: token
-      }
-    }).then((response) => {
-      if(response.data.status == 0){
-        this.alerta.errorSubject.next(response.data.mensaje);
-      }
-      else{
-        this.profileSubject.next(response.data.values);
-
-        if(response.data.values.rol != 'contador'){
-          this.getUsers(response.data.values.id_usuario);
+    if(token != null){
+      axios({
+        method: 'post',
+        url: 'http://localhost:3000/decodeToken',
+        data: {
+          token: token
         }
-      }
-    })
+      }).then((response) => {
+        if(response.data.status == 0){
+          this.alerta.errorSubject.next(response.data.mensaje);
+        }
+        else{
+          this.profileSubject.next(response.data.values);
+
+          this.router.navigate(['contador-page']);
+  
+          if(response.data.values.rol != 'contador'){
+            this.getUsers(response.data.values.id_usuario);
+          }
+        }
+      })
+    }
+    else{
+      this.router.navigate(['']);
+    }
 
   }
 
@@ -145,7 +152,6 @@ export class UsuariosService {
           this.userStatus("logged", email);
           console.log(email);
           this.setUser(email);
-          this.router.navigate(['contador-page']);
         }
 
       }
@@ -166,6 +172,11 @@ export class UsuariosService {
         console.log(response.data.mensaje)
       }
       else{
+
+        if(type == "Nlogged"){
+          localStorage.removeItem('token')
+        }
+
         console.log(response.data.mensaje)
       }
     })

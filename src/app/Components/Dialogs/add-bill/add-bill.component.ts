@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
-import {MatDialogModule} from '@angular/material/dialog';
-import { FormsModule } from '@angular/forms';
-import { NgFor } from '@angular/common';
-import { NgIf } from '@angular/common';
+
+//Import Dialogs a usar
 import { AlertaComponent } from '../alerta/alerta.component';
+
+//Import angular materials
 import {MatDialog} from '@angular/material/dialog';
 
 //IMPORTS DE SERVICIOS
 import { UsuariosService } from 'src/app/services/usuarios.service';
+import { FacturasService } from 'src/app/services/facturas.service';
 
 //IMPORTS DE INTERFACES
 import { Profiles } from 'src/app/Interfaces/profiles';
@@ -16,8 +17,6 @@ import { Profiles } from 'src/app/Interfaces/profiles';
   selector: 'app-add-bill',
   templateUrl: './add-bill.component.html',
   styleUrls: ['./add-bill.component.css'],
-  standalone: true,
-  imports: [MatDialogModule, FormsModule, NgFor, NgIf]
 })
 export class AddBillComponent {
 
@@ -39,8 +38,10 @@ export class AddBillComponent {
     id_contador: 0
   }
 
+  status: boolean = false;
+  mensaje: string = "Ingrese factura(s)"
 
-  constructor(private userService: UsuariosService, private dialog: MatDialog){}
+  constructor(private userService: UsuariosService, private dialog: MatDialog, private billService: FacturasService){}
 
   ngOnInit(){
 
@@ -48,6 +49,12 @@ export class AddBillComponent {
     this.userService.profile$.subscribe((profile) => {
       this.defaultProfile = profile;
     });
+
+  }
+
+  uploadBills(event: any){
+
+    
 
   }
     

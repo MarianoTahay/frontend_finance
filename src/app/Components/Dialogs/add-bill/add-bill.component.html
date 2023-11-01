@@ -11,9 +11,15 @@
         <div id="contenedor">
 
             <label for="file-upload" class="custom-file-upload">
-                Ingrese su factura
+                <span class="material-symbols-outlined" style="color: rgb(162, 255, 162); font-size: 2vw;" *ngIf="status">
+                    done
+                </span>
+                <span class="material-symbols-outlined" style="font-size: 2vw;" *ngIf="!status">
+                    pending
+                </span>
+                {{mensaje}}
             </label>
-            <input id="file-upload" type="file"/>
+            <input id="file-upload" type="file" multiple (change)="uploadBills($event)"/>
 
         </div>
           

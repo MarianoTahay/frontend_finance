@@ -10,6 +10,21 @@ input{
     font-family: 'Roboto', sans-serif;
 }
 
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 3px dashed #48b8ce;
+    cursor: pointer;
+}
+
 button{
     width: 30%;
     height: 40%;
@@ -45,6 +60,9 @@ button:hover{
 #img{
     width: 100px;
     height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 1px solid #C1C1C1;
     border-radius: 50%;
 }

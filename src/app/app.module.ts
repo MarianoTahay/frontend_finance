@@ -34,6 +34,7 @@ import { AddCounterComponent } from './Components/Dialogs/add-counter/add-counte
     LoginRegisterComponent,
     AdminComponent,
     AddCounterComponent,
+    AddBillComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,8 +44,6 @@ import { AddCounterComponent } from './Components/Dialogs/add-counter/add-counte
 
     MatIconModule,
     MatDialogModule,
-
-    AddBillComponent,
 
   ],
   providers: [],

@@ -42,6 +42,8 @@ export class ProfileComponent {
   apellido: string = "";
   correo: string = "";
 
+  imagePath: string = "";
+
   constructor(private userService: UsuariosService, private router: Router, private dialog: MatDialog){}
 
   ngOnInit(){
@@ -68,6 +70,22 @@ export class ProfileComponent {
 
   mostrarSave(){
     this.save = true;
+  }
+
+  uploadProfile(event: Event){
+
+    const input = event.target as HTMLInputElement;
+    
+    if(input.files && input.files.length > 0){
+      const file: File = input.files[0];
+
+      this.imagePath = window.URL.createObjectURL(file);
+
+      console.log(this.imagePath)
+
+
+    }
+
   }
 
 }
