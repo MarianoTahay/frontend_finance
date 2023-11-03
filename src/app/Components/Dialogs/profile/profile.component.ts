@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 
 //IMPORTS DE SERVICIOS
 import { UsuariosService } from 'src/app/services/usuarios.service';
+import { DialogsService } from 'src/app/services/dialogs.service';
 
 //IMPORTS DE MATERIALS
 import { MatDialog } from '@angular/material/dialog';
@@ -48,7 +49,6 @@ export class ProfileComponent {
 
   ngOnInit(){
 
-
     this.userService.profile$.subscribe((profile) => {
       this.defaultProfile = profile;
       this.nombre = this.defaultProfile.nombre;
@@ -58,6 +58,10 @@ export class ProfileComponent {
 
     this.userService.profiles$.subscribe((profiles) => {
       this.profiles = profiles;
+    })
+
+    this.userService.imagePath$.subscribe((imagePath) => {
+      this.imagePath = imagePath;
     })
     
   }
@@ -77,13 +81,20 @@ export class ProfileComponent {
     const input = event.target as HTMLInputElement;
     
     if(input.files && input.files.length > 0){
-      const file: File = input.files[0];
+      const file = input.files[0];
 
-      this.imagePath = window.URL.createObjectURL(file);
+      this.imagePath = URL.createObjectURL(file)
 
-      console.log(this.imagePath)
+      const formData = new FormData();
 
+      formData.append('tipo', "pic");
+      formData.append('id', (this.defaultProfile.id_usuario).toString());
+      formData.append('archivo', file);
 
+      this.userService.saveImage(formData);
+
+      location.reload()
+      
     }
 
   }

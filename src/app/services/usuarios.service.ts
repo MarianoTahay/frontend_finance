@@ -51,6 +51,10 @@ export class UsuariosService {
   private usuariosSubject = new BehaviorSubject<Usuarios[]>([]);
   usuarios$ = this.usuariosSubject.asObservable();
 
+  //Observable para el path de la imagen
+  private imagePathSubject = new BehaviorSubject<string>("");
+  imagePath$ = this.imagePathSubject.asObservable();
+
   constructor(private router: Router, private alerta: DialogsService, private dialog: MatDialog) {
 
     this.locateUser();
@@ -75,6 +79,8 @@ export class UsuariosService {
         }
         else{
           this.profileSubject.next(response.data.values);
+
+          this.getProfilePic(response.data.values.avatar, "pic");
 
           this.router.navigate(['contador-page']);
   
@@ -310,4 +316,32 @@ export class UsuariosService {
     const message = await this.alerta.errorSubject.next(response.data.mensaje);
     return message;
   }
+
+  //PRUEBA CON MULTER
+  saveImage(file: FormData){
+    console.log("Entro al servicio")
+    axios.post('http://localhost:3000/subirArchivo', file, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+  }
+
+  getProfilePic(name: string, tipo: string){
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/getProfilePic',
+      data: {
+        name: name,
+        tipo: tipo
+
+      }
+    }).then((response) => {
+      this.imagePathSubject.next(response.data)
+    })
+    
+  }
+
+
+
 }
