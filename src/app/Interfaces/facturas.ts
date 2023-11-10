@@ -1,8 +1,13 @@
 export interface Facturas {
-    dte: string;
+    id_factura: number;
+    dte: number;
     serie: string;
-    nit_emisor: string;
-    monto: string;
+    nit_emisor: number;
+    monto: number;
     fecha_emision: string;
-    username: string;  
+    id_usuario: number;
+    imagen: string;
+    pdf: string;
+    status: string;
+    username: string; 
 }

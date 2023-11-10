@@ -5,6 +5,7 @@ import { UsuariosService } from 'src/app/services/usuarios.service';
 
 //Imports interfaces
 import { Profiles } from 'src/app/Interfaces/profiles';
+import { Users } from 'src/app/Interfaces/users';
 
 @Component({
   selector: 'app-add-counter',
@@ -33,7 +34,7 @@ export class AddCounterComponent {
     id_contador: 0
   }
 
-  profiles: Profiles[] = [];
+  users: Users[] = [];
 
   constructor(private userService: UsuariosService){}
 
@@ -43,14 +44,8 @@ export class AddCounterComponent {
       this.defaultProfile = profile;
     })
 
-    this.userService.profiles$.subscribe((profiles) => {
-
-      for(let i = 0; i < profiles.length; i++){
-        if(profiles[i].rol != 'cliente'){
-          this.profiles.push(profiles[i]);
-        }
-      }
-
+    this.userService.users$.subscribe((users) => {
+      this.users = users
     })
   }
 

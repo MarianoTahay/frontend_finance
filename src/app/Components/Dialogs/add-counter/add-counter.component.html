@@ -20,7 +20,7 @@
 
                 <select [(ngModel)]="contadorSeleccionado">
                     <option value="" selected>Contador</option>
-                    <option *ngFor="let data of profiles" [ngValue]="data.id_usuario">{{data.username}}</option>
+                    <option *ngFor="let data of users" [ngValue]="data.id_usuario">{{data.username}}</option>
                 </select>
     
             </div>

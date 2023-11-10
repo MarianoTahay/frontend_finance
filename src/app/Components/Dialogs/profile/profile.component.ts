@@ -60,10 +60,6 @@ export class ProfileComponent {
       this.correo = this.defaultProfile.email;
     })
 
-    this.userService.profiles$.subscribe((profiles) => {
-      this.profiles = profiles;
-    })
-
     this.userService.imagePath$.subscribe((imagePath) => {
       this.imagePath = imagePath;
     })

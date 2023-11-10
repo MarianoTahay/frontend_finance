@@ -25,7 +25,7 @@
 
 		<div id="tabs">
 
-			<div class="opciones" (click)="mostrarReportes()">
+			<div class="opciones" (click)="mostrarReportes()" *ngIf="defaultProfile.rol != 'usuario'">
 
                 <span class="material-symbols-outlined">
                     overview
@@ -190,7 +190,12 @@
     
                 <!-- USERNAME -->
 				<div class="filtro" *ngIf="defaultProfile.rol == 'contador'">
-                    <input type="text" placeholder="Username" [(ngModel)]="username_Filter">
+					<select [(ngModel)]="username_Filter">
+						<option value="" selectedn disabled>Username</option>
+						<option value="" >All</option>
+						<option *ngFor="let user of listUsers" [value]="user.id_usuario">{{user.username}}</option>
+						
+					</select>
                 </div>
     
                 <!-- DATE -->
@@ -214,9 +219,9 @@
                 <!-- COMPANIE -->
 				<div class="filtro">
 					<select [(ngModel)]="nit_emisor">
-						<option value=0 selected disabled>Emisor</option>
-						<option value=0 >All</option>
-						<option *ngFor="let empresa of empresas" [value]="empresa.nit">{{empresa.nombre_empresa}}</option>
+						<option value="" selected disabled>Emisor</option>
+						<option value="" >All</option>
+						<option *ngFor="let empresa of empresas" [value]="empresa.nit">{{empresa.nombre}}</option>
 					</select>
 				</div>
     
@@ -270,17 +275,24 @@
 					</div>
 
 					<div id="acciones">
-						<button style="background-color: #dc3545; width: 30%;">
+						<button style="background-color: #dc3545; width: 30%;" (click)="deleteBill(item.dte.toString(), item.serie)">
 							<span class="material-symbols-outlined">
 								delete
 							</span>
 						</button>
 
-						<button style="background-color: #48b8ce; width: 30%;">
+						<a href="{{documentPath + item.imagen}}" target="_blank" style="background-color: #48b8ce; width: 30%;" download *ngIf="item.imagen != ''">
 							<span class="material-symbols-outlined">
-								edit
+								visibility
 							</span>
-						</button>
+						</a>
+
+						<a href="{{documentPath + item.pdf}}" target="_blank" style="background-color: #48b8ce; width: 30%;" download *ngIf="item.imagen == ''">
+							<span class="material-symbols-outlined">
+								visibility
+							</span>
+						</a>
+
 					</div>
 
 				</div>

@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 //IMPORTS DE SERVICIOS
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { FacturasService } from 'src/app/services/facturas.service';
+import { EmpresasService } from 'src/app/services/empresas.service';
 
 //IMPORTS PARA LAS INTERFACES
 import { Usuarios } from 'src/app/Interfaces/usuarios';
@@ -20,6 +21,7 @@ import { AddBillDirectComponent } from '../Dialogs/add-bill-direct/add-bill-dire
 
 //IMPORTS DE LAS INTERFACES
 import { Profiles } from 'src/app/Interfaces/profiles';
+import { Users } from 'src/app/Interfaces/users';
 
 @Component({
   selector: 'app-contador',
@@ -59,6 +61,8 @@ export class ContadorComponent {
   arregloUsuarios: string[] = [];
   arregloEmails: string[] = [];
 
+  listUsers: Users[] = [];
+
   //DATOS PARA PODER MOSTRAR LAS FACTURAS
   facturas: Facturas[] = [];
   empresas: Empresa[] = [];
@@ -82,28 +86,40 @@ export class ContadorComponent {
   min: string = "";
   max: string = "";
 
+  documentPath: string = "http://localhost:3000/static/documentos/"
+
   
-  constructor(private userService: UsuariosService, private facturaService: FacturasService, private router: Router, private dialog: MatDialog) { }
+  constructor(private userService: UsuariosService, private facturaService: FacturasService, private router: Router, private dialog: MatDialog, private empresaService: EmpresasService) { }
 
   ngOnInit(){
 
     //OBTENEMOS LOS DATOS DE LA SESION ACTUAL
     this.userService.profile$.subscribe((profile) => {
       this.defaultProfile = profile;
-/*
+
+      this.userService.listUsers(profile.id_usuario);
+
       if(this.defaultProfile.rol == "contador") {
-        this.facturaService.showBill("", "", "", "", "", "", "", this.defaultProfile.username);
-        this.userService.showUser(this.defaultProfile.username, "", "", "", "", "", "", "", "");
+        this.facturaService.showBill("", "", "", "", "", "", "", "", this.defaultProfile.id_usuario.toString(), 'ingresada');
+        this.userService.showUser(this.defaultProfile.id_usuario.toString(), "", "", "", "", "", "", "", "");
       } 
       else{
-        this.facturaService.showBill(this.defaultProfile.username, "", "", "", "", "", "", "");
+        this.facturaService.showBill(this.defaultProfile.id_usuario.toString(), "", "", "", "", "", "", "", "", 'ingresada');
       }
-      */
+      
     });
 
     //OBTENEMOS LOS DATOS INICIALES PARA PODER MOSTRAR LAS FACTURAS
     this.facturaService.facturas$.subscribe((facturas) => {
       this.facturas = facturas;
+    })
+
+    //Obtenemos la lista de usuarios
+
+    
+
+    this.userService.listUsers$.subscribe((listUsers) => {
+      this.listUsers = listUsers;
     })
 
 
@@ -116,11 +132,9 @@ export class ContadorComponent {
       }
     })
 
-    /*
-    this.backend.empresa$.subscribe((empresas) => {
+    this.empresaService.empresas$.subscribe((empresas) => {
       this.empresas = empresas;
     })
-    */
 
   }
 
@@ -201,11 +215,13 @@ export class ContadorComponent {
 
   showBills(){
 
-    if(this.defaultProfile.rol == "cliente"){
-      this.facturaService.showBill(this.username_Filter, this.date_start, this.date_finish, this.min, this.max, this.nit_emisor, this.order, "");
+    console.log("ID USUARIO: " + this.username_Filter)
+
+    if(this.defaultProfile.rol != "contador"){
+      this.facturaService.showBill(this.defaultProfile.id_usuario.toString(), this.date_start, this.date_finish, this.min, this.max, this.nit_emisor, "", this.order, "", 'ingresada');
     }
     else{
-      this.facturaService.showBill(this.username_Filter, this.date_start, this.date_finish, this.min, this.max, this.nit_emisor, this.order, this.defaultProfile.username);
+      this.facturaService.showBill(this.username_Filter, this.date_start, this.date_finish, this.min, this.max, this.nit_emisor, "", this.order, this.defaultProfile.id_usuario.toString(), 'ingresada');
     }
 
     this.username_Filter = "";
@@ -217,13 +233,26 @@ export class ContadorComponent {
     this.max = "";
   }
 
-/*
   deleteBill(dte: string, serie: string){
-    this.backend.deleteBill(dte, serie);
-    this.ngOnInit();
-    console.log("Borrar: " + dte);
+
+    if(this.defaultProfile.rol != "contador"){
+      this.facturaService.deleteBill(this.defaultProfile.id_usuario.toString(), dte, serie, "");
+    }
+    else{
+      this.facturaService.deleteBill("", dte, serie, this.defaultProfile.id_usuario.toString());
+    }
   }
-*/
+
+  downloadBill(imagen: string, pdf: string){
+    
+    if(imagen == ""){
+      this.facturaService.downloadBill(pdf);
+    }
+    else{
+      this.facturaService.downloadBill(imagen);
+    }
+  }
+
   //MOSTRAR EL PERFIL DEL USUARIO
   profile(){
     this.dialog.open(ProfileComponent, {

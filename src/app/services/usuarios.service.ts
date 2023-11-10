@@ -8,6 +8,7 @@ import { DialogsService } from './dialogs.service';
 //Imports de interfaces
 import { Profiles } from '../Interfaces/profiles';
 import { Usuarios } from '../Interfaces/usuarios';
+import { Users } from '../Interfaces/users';
 
 //Imports librerias descargadas
 import axios from 'axios';
@@ -43,9 +44,13 @@ export class UsuariosService {
   private profileSubject = new BehaviorSubject<Profiles>(this.defaultProfile);
   profile$ = this.profileSubject.asObservable();
 
-  //Observable: todos los perfiles
-  private profilesSubject = new BehaviorSubject<Profiles[]>([]);
-  profiles$ = this.profilesSubject.asObservable();
+  //Observable: todos los usuarios -> POSIBLES CONTADORES
+  private usersSubject = new BehaviorSubject<Users[]>([]);
+  users$ = this.usersSubject.asObservable();
+
+  //Observable: Lista de todos los usurarios
+  private listUsersSubject = new BehaviorSubject<Users[]>([]);
+  listUsers$ = this.listUsersSubject.asObservable();
 
   //Observable: Listar usuarios para contador
   private usuariosSubject = new BehaviorSubject<Usuarios[]>([]);
@@ -289,7 +294,30 @@ export class UsuariosService {
         });
       }
       else{
-        this.profilesSubject.next(response.data.values);
+        this.usersSubject.next(response.data.values);
+      }
+    })
+  }
+
+  listUsers(id: number){
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/listUsers',
+      data: {
+        id: id
+      }
+    }).then((response) => {
+      if(response.data.status == 0){
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
+      }
+      else{
+        console.log("Usuarios filter: " + id)
+        console.log(response.data.values)
+        this.listUsersSubject.next(response.data.values);
       }
     })
   }

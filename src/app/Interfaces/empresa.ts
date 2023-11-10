@@ -1,5 +1,7 @@
 export interface Empresa {
-    nombre_empresa: string;
+    nombre: string;
     nit: number;
-    categoria: string;
+    logo: string;
+    id_categoria: number;
+    status: string;
 }

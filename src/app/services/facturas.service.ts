@@ -55,7 +55,7 @@ export class FacturasService {
   }
 
   //Mostrar facturas
-  showBill(username: string, date_start: string, date_finish:string, min: string, max: string, companie: string, order: string, contador: string){
+  showBill(id_usuario: string, date_start: string, date_finish:string, min: string, max: string, nit_emisor: string, nit_receptor: string, order: string, id_contador: string, status: string){
 
     if(order == "Order"){
       order = "";
@@ -67,26 +67,20 @@ export class FacturasService {
       order = "DESC"
     }
 
-    if(min == null){
-      min = "0"
-    }
-
-    if(max == null){
-      max = "0"
-    }
-
     axios({
       method: 'post',
       url: 'http://localhost:3000/bills-filter',
       data: {
-        username: username,
+        id_usuario: id_usuario,
         date_start: date_start,
         date_finish: date_finish,
         min: min,
         max: max,
-        companie: companie,
+        nit_emisor: nit_emisor,
+        nit_receptor: nit_receptor,
         order: order,
-        contador: contador
+        id_contador: id_contador,
+        status: status
       }
     }).then((response) => {
       if(response.data.status == 0){
@@ -94,10 +88,12 @@ export class FacturasService {
       }
       else{
         this.facturasSubject.next(response.data.values);
+        console.log(response.data.values)
       }
     })
   }
 
+  //Insertar facturas 
   addBill(dte: string, serie: string, emisor: string, receptor: string, monto: string, emision: string, user: number, imagen: string, pdf: string, status: string, file: File){
     axios({
       method: 'post',
@@ -136,6 +132,13 @@ export class FacturasService {
 
         this.saveBill(formData);
 
+        if(this.defaultProfile.rol != "contador"){
+          this.showBill(this.defaultProfile.id_usuario.toString(), "", "", "", "", "", "", "", "", "ingresada")
+        }
+        else{
+          this.showBill("", "", "", "", "", "", "", "", this.defaultProfile.id_usuario.toString(), "ingresada")
+        }
+
       }
     })
   }
@@ -146,6 +149,46 @@ export class FacturasService {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
+    })
+  }
+
+  //Borrar factura
+  deleteBill(usuario: string, dte: string, serie: string, contador: string){
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/bills-delete',
+      data: {
+        dte: dte, 
+        serie: serie
+      }
+    }).then((response) => {
+      if(response.data.status == 0){
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
+      }
+      else{
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
+        this.showBill(usuario, "", "", "", "", "", "", "", contador, "ingresada")
+      }
+    })
+  }
+
+  downloadBill(token: string){
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/downloadFile',
+      data: {
+        token:token
+      }
+    }).then((response) => {
+      console.log("Se esta descargando")
     })
   }
 
