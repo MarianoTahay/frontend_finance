@@ -59,6 +59,15 @@ export class UsuariosService {
 
     this.locateUser();
 
+    if(localStorage.getItem('save') != null && localStorage.getItem('save') == "true"){
+      this.alerta.errorSubject.next("Datos Guardados")
+      this.dialog.open(AlertaComponent, {
+        width: '30%',
+        height: '30%'
+      });
+      localStorage.setItem("save", "false");
+    } 
+
    }
 
    //Guardar la sesion del usuario
@@ -81,6 +90,8 @@ export class UsuariosService {
           this.profileSubject.next(response.data.values);
 
           this.getProfilePic(response.data.values.avatar, "pic");
+
+          console.log(response.data.values.avatar)
 
           this.router.navigate(['contador-page']);
   
@@ -311,15 +322,8 @@ export class UsuariosService {
     })
   }
 
-  //Esperamos a que se cargue el mensaje.
-  async mensaje(response: any){
-    const message = await this.alerta.errorSubject.next(response.data.mensaje);
-    return message;
-  }
-
   //PRUEBA CON MULTER
   saveImage(file: FormData){
-    console.log("Entro al servicio")
     axios.post('http://localhost:3000/subirArchivo', file, {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -342,6 +346,38 @@ export class UsuariosService {
     
   }
 
+  saveChanges(nombre: string, apellido: string, email: string, avatar: string){
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/updateUser',
+      data: {
+        nombre: nombre,
+        apellido: apellido,
+        email: email,
+        avatar: avatar
+      }
+    }).then((response) => {
+      if(response.data.status == 0){
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
+      }
+      else{
+        localStorage.setItem('save', 'true');
 
+        location.reload();
+
+        this.setUser(email);
+      }
+    })
+  }
+
+  //Esperamos a que se cargue el mensaje.
+  async mensaje(response: any){
+    const message = await this.alerta.errorSubject.next(response.data.mensaje);
+    return message;
+  }
 
 }

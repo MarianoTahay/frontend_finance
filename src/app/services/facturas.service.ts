@@ -98,12 +98,60 @@ export class FacturasService {
     })
   }
 
-  addBill(formData: FormData){
+  addBill(dte: string, serie: string, emisor: string, receptor: string, monto: string, emision: string, user: number, imagen: string, pdf: string, status: string, file: File){
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/bills-insert',
+      data: {
+        dte: dte, 
+        serie: serie, 
+        emisor: emisor, 
+        receptor: receptor, 
+        monto: monto, 
+        emision: emision, 
+        user: user, 
+        imagen: imagen, 
+        pdf: pdf, 
+        status: status
+      }
+    }).then((response) => {
+      if(response.data.status == 0){
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
+      }
+      else{
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
 
-    axios.post('http://localhost:3000/subir-archivo', formData, {
+        const formData = new FormData();
+
+        formData.append('token', response.data.documentToken);
+        formData.append('archivo', file);
+
+        this.saveBill(formData);
+
+      }
+    })
+  }
+
+  //GUARDAR FACTURA
+  saveBill(file: FormData){
+    axios.post('http://localhost:3000/subirFactura', file, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
+  }
+
+  //Esperamos a que se cargue el mensaje.
+  async mensaje(response: any){
+    const message = await this.alerta.errorSubject.next(response.data.mensaje);
+    return message;
   }
 }

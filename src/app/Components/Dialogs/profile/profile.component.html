@@ -39,7 +39,7 @@
                 <div class="label">
                     Correo:
                 </div>
-                <input type="text" name="correo" [(ngModel)]="correo" *ngIf="save" style="border: 2px solid #48b8ce;">
+                <input type="text" name="correo" [(ngModel)]="correo" *ngIf="save" (input)="emailValidation($event)" [ngStyle]="{'border': emailBorderColor}">
                 <input type="text" name="correo" [(ngModel)]="correo" readonly *ngIf="!save" style="cursor: pointer;">
 
             </div>
@@ -51,7 +51,7 @@
                         edit
                     </span>
                 </button>
-                <button  style="background-color: rgb(81, 178, 81);" *ngIf="save">
+                <button  style="background-color: rgb(81, 178, 81);" *ngIf="save" (click)="saveChanges()">
                     <span class="material-symbols-outlined">
                         save
                     </span>

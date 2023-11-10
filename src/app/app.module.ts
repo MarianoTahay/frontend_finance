@@ -19,10 +19,15 @@ import { AdminComponent } from './Components/admin/admin.component';
 import { AlertaComponent } from './Components/Dialogs/alerta/alerta.component';
 import { AddBillComponent } from './Components/Dialogs/add-bill/add-bill.component';
 import { AddUserComponent } from './Components/Dialogs/add-user/add-user.component';
+import { AddBillDirectComponent } from './Components/Dialogs/add-bill-direct/add-bill-direct.component';
 
 //Librerias descargadas
 import { ProfileComponent } from './Components/Dialogs/profile/profile.component';
 import { AddCounterComponent } from './Components/Dialogs/add-counter/add-counter.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+
+//PIPES
+import { SafePipe } from './Pipe/safe.pipe';
 
 @NgModule({
   declarations: [
@@ -35,6 +40,8 @@ import { AddCounterComponent } from './Components/Dialogs/add-counter/add-counte
     AdminComponent,
     AddCounterComponent,
     AddBillComponent,
+    AddBillDirectComponent,
+    SafePipe,
   ],
   imports: [
     BrowserModule,
@@ -44,6 +51,8 @@ import { AddCounterComponent } from './Components/Dialogs/add-counter/add-counte
 
     MatIconModule,
     MatDialogModule,
+
+    PdfViewerModule
 
   ],
   providers: [],

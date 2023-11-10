@@ -1,0 +1,86 @@
+input{
+    width: 50%;
+    height: 15%;
+    border: 1px solid rgb(210, 210, 210);
+    border-radius: 5px;
+    outline: none;
+    box-shadow: none;
+    font-size: 1.5vw;
+    color: rgb(95, 95, 95);
+    font-family: 'Roboto', sans-serif;
+}
+
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+button{
+    width: 20%;
+    height: 50%;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 1.5vw;
+}
+
+button:hover{
+    opacity: 80%;
+    cursor: pointer;
+}
+
+.label{
+    width: 50%;
+    height: 15%;
+    display: flex;
+    align-items: center;
+}
+
+#contenedor{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+#factura{
+    width: 40%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 2px dashed rgb(228, 227, 227);
+}
+
+#datos{
+    width: 60%;
+    height: 100%;
+}
+
+#formulario{
+    width: 100%;
+    height: 85%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#acciones{
+    width: 100%;
+    height: 15%;
+    display: flex;
+    gap: 5%;
+    justify-content: center;
+    align-items: center;
+}

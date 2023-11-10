@@ -39,11 +39,15 @@ export class ProfileComponent {
 
   profiles: Profiles[] = [];
 
+  avatar: string = "";
   nombre: string = "";
   apellido: string = "";
   correo: string = "";
 
   imagePath: string = "";
+  data: FormData | null = null;
+
+  emailBorderColor: string = "2px solid #48b8ce";
 
   constructor(private userService: UsuariosService, private router: Router, private dialog: MatDialog){}
 
@@ -83,20 +87,51 @@ export class ProfileComponent {
     if(input.files && input.files.length > 0){
       const file = input.files[0];
 
-      this.imagePath = URL.createObjectURL(file)
+      if(file.name.split('.').pop() == "jpg" || file.name.split('.').pop() == "png"){
 
-      const formData = new FormData();
+        this.avatar = this.defaultProfile.id_usuario + '.' + (file.name.split('.').pop() || '');
 
-      formData.append('tipo', "pic");
-      formData.append('id', (this.defaultProfile.id_usuario).toString());
-      formData.append('archivo', file);
+        this.imagePath = URL.createObjectURL(file)
 
-      this.userService.saveImage(formData);
+        const formData = new FormData();
 
-      location.reload()
-      
+        formData.append('tipo', "pic");
+        formData.append('id', (this.defaultProfile.id_usuario).toString());
+        formData.append('archivo', file);
+
+        this.data = formData
+
+      }
+      else{
+        console.log("Extension del archivo no valio");
+      }      
     }
 
+  }
+
+  saveChanges(){
+
+    if(this.data){
+      this.userService.saveChanges(this.nombre, this.apellido, this.correo, this.avatar);
+      this.userService.saveImage(this.data);
+    }
+    else{
+      this.userService.saveChanges(this.nombre, this.apellido, this.correo, "");
+    }
+
+  }
+
+  emailValidation(event: Event){
+    const inputElement = event.target as HTMLInputElement;
+    const userInputValue = inputElement.value;
+
+    const regex = /^\w+@\w+\.\w{2,}$/;
+
+    if (!regex.test(userInputValue)) {
+      this.emailBorderColor = '2px solid red';
+    } else {
+      this.emailBorderColor = '2px solid #48b8ce';
+    }
   }
 
 }

@@ -16,6 +16,7 @@ import { AddUserComponent } from '../Dialogs/add-user/add-user.component';
 import { AddBillComponent } from '../Dialogs/add-bill/add-bill.component';
 import { ProfileComponent } from '../Dialogs/profile/profile.component';
 import { AddCounterComponent } from '../Dialogs/add-counter/add-counter.component';
+import { AddBillDirectComponent } from '../Dialogs/add-bill-direct/add-bill-direct.component';
 
 //IMPORTS DE LAS INTERFACES
 import { Profiles } from 'src/app/Interfaces/profiles';
@@ -155,7 +156,7 @@ export class ContadorComponent {
   mostrarListaContadores(){
     this.dialog.open(AddCounterComponent, {
       width: '30%',
-      height: '70%'
+      height: '90%'
     });
   }
 
@@ -183,10 +184,19 @@ export class ContadorComponent {
 
   //FUNCIONES PARA EL TAB DE FACTURAS
   addBill(){
-    this.dialog.open(AddBillComponent, {
-      width: '30%',
-      height: '70%',
-    });
+
+    if(this.defaultProfile.rol != "cliente"){
+      this.dialog.open(AddBillDirectComponent, {
+        width: '80%',
+        height: '80%',
+      });
+    }
+    else{
+      this.dialog.open(AddBillComponent, {
+        width: '30%',
+        height: '70%',
+      });
+    }
   }
 
   showBills(){
