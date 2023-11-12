@@ -43,7 +43,6 @@ export class EmpresasService {
         });
       }
       else{
-        console.log(response.data.values)
         this.empresasSubject.next(response.data.values);
       }
     })

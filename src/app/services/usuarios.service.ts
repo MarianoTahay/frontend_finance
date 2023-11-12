@@ -236,40 +236,28 @@ export class UsuariosService {
   }
 
   //Obtiene el listado de usuarios (contadores)
-  showUser(contador: string, username: string, email: string, facturas_min: string, facturas_max: string, total_min: string, total_max: string, orderBy: string, order: string){
-    
-    if(orderBy == "Order By" || order == "Order"){
-      orderBy = "";
-      order = "";
-    }
-
-    if(order == "Order"){
-      order = "";
-    }
-    else if(order == "Ascend"){
-      order = "ASC";
-    }
-    else{
-      order = "DESC"
-    }
-    
+  getProfiles(id_contador: string, id_usuario: string, email: string, facturas_min: string, facturas_max: string, total_min: string, total_max: string, orderBy: string, order: string){
     axios({
       method: 'post',
       url: 'http://localhost:3000/users-filter',
       data: {
-        contador: contador,
-        username: username,
-        email: email,
-        facturas_min: facturas_min,
-        facturas_max: facturas_max,
-        total_min: total_min,
-        total_max: total_max,
-        orderBy: orderBy,
+        id_contador: id_contador, 
+        id_usuario: id_usuario, 
+        email: email, 
+        facturas_min: facturas_min, 
+        facturas_max: facturas_max, 
+        total_min: total_min, 
+        total_max: total_max, 
+        orderBy: orderBy, 
         order: order
       }
     }).then((response) => {
       if(response.data.status == 0){
-        this.alerta.errorSubject.next(response.data.values);
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
       }
       else{
         this.usuariosSubject.next(response.data.values);
@@ -315,8 +303,6 @@ export class UsuariosService {
         });
       }
       else{
-        console.log("Usuarios filter: " + id)
-        console.log(response.data.values)
         this.listUsersSubject.next(response.data.values);
       }
     })

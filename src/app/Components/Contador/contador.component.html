@@ -25,7 +25,7 @@
 
 		<div id="tabs">
 
-			<div class="opciones" (click)="mostrarReportes()" *ngIf="defaultProfile.rol != 'usuario'">
+			<div class="opciones" (click)="mostrarReportes()">
 
                 <span class="material-symbols-outlined">
                     overview
@@ -52,6 +52,15 @@
                 Facturas
             </div>
 
+			<div class="opciones" (click)="mostrarPending()">
+
+                <span class="material-symbols-outlined">
+                    pending_actions
+                </span>
+
+                Facturas Pendientes
+            </div>
+
 			<div class="opciones" (click)="mostrarListaContadores()" *ngIf="defaultProfile.rol == 'usuario'">
 
                 <span class="material-symbols-outlined">
@@ -75,7 +84,80 @@
 		<!-- PAGINA REPORTES  -->
 
 		<div class="contenido" *ngIf="reportes_view">
-		
+
+			<div class="filtros">
+				<!-- USERNAME -->
+				<div class="filtro" *ngIf="defaultProfile.rol == 'contador'">
+					<select [(ngModel)]="username_Filter">
+						<option value="" selectedn disabled>Username</option>
+						<option value="" >All</option>
+						<option *ngFor="let user of listUsers" [value]="user.id_usuario">{{user.username}}</option>
+					</select>
+				</div>
+	
+				<!-- DATE -->
+				<div class="filtro">
+					<input type="date" [(ngModel)]="date_start">
+				</div>
+
+				<div class="filtro">
+					<input type="date" [(ngModel)]="date_finish">
+				</div>
+
+				<div class="filtro">
+					<button  style="background-color: rgb(81, 178, 81);" (click)="showPending()">Search</button>
+				</div>
+
+				<div class="filtro">
+					<button style="background-color: rgb(144, 136, 209);" (click)="addReport()">Agregar</button>
+				</div>
+
+				<div class="filtro" style="visibility: hidden;"></div>
+				<div class="filtro" style="visibility: hidden;"></div>
+				<div class="filtro" style="visibility: hidden;"></div>
+				<div class="filtro" style="visibility: hidden;"></div>
+			</div>
+
+			<div class="lista">
+
+				<div id="reportes">
+
+					<div id="reporte">
+
+						<p>
+							<b>Username:</b>
+						</p>
+
+						<p>
+							<b>Fecha:</b>
+						</p>
+
+					</div>
+
+					<div id="acciones">
+
+						<!-- BORRAR REPORTE -->
+						<button style="background-color: #dc3545; width: 30%;">
+							<span class="material-symbols-outlined">
+								delete
+							</span>
+						</button>
+
+						<!-- VER REPORTE -->
+						<a target="_blank" style="background-color: #48b8ce; width: 30%;" download>
+							<span class="material-symbols-outlined">
+								visibility
+							</span>
+						</a>
+
+					</div>
+
+				</div>
+
+
+
+            </div>
+
 		</div>
 
 		<!-- PAGINA PARA LISTAR USUARIOS -->
@@ -86,14 +168,22 @@
         
 				<!-- USERNAME -->
 				<div class="filtro">
-                    <input type="text" placeholder="Username" [(ngModel)]="username_Filter">
+					<select [(ngModel)]="username_Filter">
+						<option value="" selectedn disabled>Username</option>
+						<option value="" >All</option>
+						<option *ngFor="let user of usuarios" [value]="user.id_usuario">{{user.username}}</option>
+					</select>
                 </div>
 	
 				<!-- email -->
 				<div class="filtro">
-                    <input type="number" placeholder="Email" [(ngModel)]="email">
+					<select [(ngModel)]="email">
+						<option value="" selectedn disabled>Email</option>
+						<option value="" >All</option>
+						<option *ngFor="let user of usuarios" [value]="user.email">{{user.email}}</option>
+					</select>
                 </div>
-	
+
 				<!-- MIN - MAX (FACTURAS) -->
 				<div class="filtro">
                     <input type="number" placeholder="Min - Facturas" [(ngModel)]="facturas_min">
@@ -126,8 +216,8 @@
 				<div class="filtro">
 					<select [(ngModel)]="order">
 						<option [value]="" selected disabled >Order</option>
-						<option value="Descend">Descend</option>
-						<option value="Ascend">Ascend</option>
+						<option value="DESC">Descend</option>
+						<option value="ASC">Ascend</option>
 					</select>
 				</div>
 
@@ -143,7 +233,7 @@
 
 					<div id="avatar">
 						<div id="temp">
-
+							<img src="{{imagePath + user.avatar}}" width="100%" style="overflow: hidden; border-radius: 50%;" *ngIf="user.avatar != null">
 						</div>
 					</div>
 
@@ -168,12 +258,6 @@
 								delete
 							</span>
 						</button>
-
-						<button style="background-color: #48b8ce; width: 30%;">
-							<span class="material-symbols-outlined">
-								info
-							</span>
-						</button>
 					</div>
 
 				</div>
@@ -194,7 +278,6 @@
 						<option value="" selectedn disabled>Username</option>
 						<option value="" >All</option>
 						<option *ngFor="let user of listUsers" [value]="user.id_usuario">{{user.username}}</option>
-						
 					</select>
                 </div>
     
@@ -275,6 +358,95 @@
 					</div>
 
 					<div id="acciones">
+						<button style="background-color: #dc3545; width: 30%;" (click)="deleteBill(item.dte.toString(), item.serie)">
+							<span class="material-symbols-outlined">
+								delete
+							</span>
+						</button>
+
+						<a href="{{documentPath + item.imagen}}" target="_blank" style="background-color: #48b8ce; width: 30%;" download *ngIf="item.imagen != ''">
+							<span class="material-symbols-outlined">
+								visibility
+							</span>
+						</a>
+
+						<a href="{{documentPath + item.pdf}}" target="_blank" style="background-color: #48b8ce; width: 30%;" download *ngIf="item.imagen == ''">
+							<span class="material-symbols-outlined">
+								visibility
+							</span>
+						</a>
+
+					</div>
+
+				</div>
+
+            </div>
+
+		</div>
+
+		<!-- FACTURAS PENDIENTES -->
+		<div class="contenido" *ngIf="pending_view">
+
+			<div class="filtros">
+    
+				<!-- USERNAME -->
+				<div class="filtro" *ngIf="defaultProfile.rol == 'contador'">
+					<select [(ngModel)]="username_Filter">
+						<option value="" selectedn disabled>Username</option>
+						<option value="" >All</option>
+						<option *ngFor="let user of listUsers" [value]="user.id_usuario">{{user.username}}</option>
+					</select>
+				</div>
+	
+				<!-- DATE -->
+				<div class="filtro">
+					<input type="date" [(ngModel)]="date_start">
+				</div>
+
+				<div class="filtro">
+					<input type="date" [(ngModel)]="date_finish">
+				</div>
+
+				<div class="filtro">
+					<button  style="background-color: rgb(81, 178, 81);" (click)="showPending()">Search</button>
+				</div>
+
+				<div class="filtro" style="visibility: hidden;"></div>
+				<div class="filtro" style="visibility: hidden;"></div>
+				<div class="filtro" style="visibility: hidden;"></div>
+				<div class="filtro" style="visibility: hidden;"></div>
+				<div class="filtro" style="visibility: hidden;"></div>
+
+
+			</div>
+
+			<div class="lista">
+
+				<div id="facturas" *ngFor="let item of facturas_pendientes">
+
+					<div id="dataFacturas">
+
+						<p *ngIf="defaultProfile.rol == 'contador'">
+							<b>Username:</b> {{item.username}} 
+						</p>
+
+						<p>
+							<b>Fecha:</b> {{item.fecha_emision}}
+						</p>
+
+					</div>
+
+					<div id="monto">
+
+					</div>
+
+					<div id="acciones">
+						<button style="background-color: rgb(81, 178, 81); width: 30%;" (click)="addPending(item.imagen, item.pdf, item.id_usuario, item.username, item.id_factura)">
+							<span class="material-symbols-outlined">
+								add
+							</span>
+						</button>
+
 						<button style="background-color: #dc3545; width: 30%;" (click)="deleteBill(item.dte.toString(), item.serie)">
 							<span class="material-symbols-outlined">
 								delete

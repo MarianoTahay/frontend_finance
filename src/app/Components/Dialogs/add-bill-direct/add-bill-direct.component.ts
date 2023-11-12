@@ -1,12 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 //IMPORT DE LOS SERVICIOS
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { FacturasService } from 'src/app/services/facturas.service';
 import { DialogsService } from 'src/app/services/dialogs.service';
+import { EmpresasService } from 'src/app/services/empresas.service';
 
 //IMPORTS DE INTERFACES
 import { Profiles } from 'src/app/Interfaces/profiles';
+import { Users } from 'src/app/Interfaces/users';
+import { Empresa } from 'src/app/Interfaces/empresa';
 
 //IMPORTS DIALOGS
 import { AlertaComponent } from '../alerta/alerta.component';
@@ -49,19 +53,35 @@ export class AddBillDirectComponent {
   imagen: string = "";
   pdf: string = "";
 
+  //DOCUMENTO DE LA FACTRUA
   status: boolean = false;
   pdfDoc: boolean = false;
-
   imagePath:string = "";
   documentPath: string = "";
   data: File | null = null;
 
-  constructor(private userService: UsuariosService, private billService: FacturasService, private alertaService: DialogsService, private dialog: MatDialog){}
+  //Lista de usuarios 
+  listUsers: Users[] = [];
+  username_Filter: number = 0;
+
+  //Lista de empresas
+  empresas: Empresa[] = [];
+
+  constructor(private userService: UsuariosService, private billService: FacturasService, private alertaService: DialogsService, private dialog: MatDialog, private empresaService: EmpresasService, @Inject(MAT_DIALOG_DATA) public info: any){}
 
   ngOnInit(){
     this.userService.profile$.subscribe((profile) => {
       this.defaultProfile = profile;
+    });
+
+    this.userService.listUsers$.subscribe((listUsers) => {
+      this.listUsers = listUsers;
+    });
+
+    this.empresaService.empresas$.subscribe((empresas) => {
+      this.empresas = empresas;
     })
+
   }
 
   selectBill(event: Event){
@@ -76,11 +96,13 @@ export class AddBillDirectComponent {
 
         if(this.data.name.split('.').pop() == "pdf"){
           this.pdfDoc = true;
+          this.imagen = "";
           this.pdf = this.data.name;
           this.documentPath = URL.createObjectURL(this.data);
         }
         else{
           this.pdfDoc = false;
+          this.pdf = "";
           this.imagen = this.data.name;
           this.imagePath = URL.createObjectURL(this.data);
         }
@@ -93,22 +115,13 @@ export class AddBillDirectComponent {
   }
 
   addBill(){
-
-    console.log("DTE: " + this.dte);
-    console.log("SERIE: " + this.serie);
-    console.log("EMISOR: " + this.emisor);
-    console.log("RECEPTOR: " + this.receptor);
-    console.log("MONTO: " + this.monto);
-    console.log("EMISION: " + this.emision);
-    console.log("USUARIO: " + this.defaultProfile.id_usuario);
-    console.log("PDF: " + this.pdf);
-    console.log("IMAGEN: " + this.imagen);
-    console.log("STATUS: " + "ingresada");
+    if(this.defaultProfile.rol != "contador"){
+      this.username_Filter = this.defaultProfile.id_usuario;
+    }
 
     if(this.data){
-      this.billService.addBill(this.dte, this.serie, this.emisor, this.receptor, this.monto, this.emision, this.defaultProfile.id_usuario, this.imagen, this.pdf, "ingresada", this.data);
-      this.imagen = "";
-      this.pdf = "";
+      this.billService.addBill(this.dte, this.serie, this.emisor, this.receptor, this.monto, this.emision, this.username_Filter, this.imagen, this.pdf, "ingresada", this.data);
+      this.userService.getProfiles(this.defaultProfile.id_usuario.toString(), "", "", "", "", "", "", "", "");
     }
     else{
       this.alertaService.errorSubject.next("Error en el archivo");
@@ -116,8 +129,15 @@ export class AddBillDirectComponent {
         width: '30%',
         height: '30%'
       });
+
     }
+
+
     
+  }
+
+  updateBill(){
+    this.billService.updateBill(parseInt(this.dte), this.serie, parseInt(this.emisor), parseInt(this.receptor), parseInt(this.monto), this.emision, this.info.id_factura)
   }
 
 

@@ -12,18 +12,29 @@
         <div id="factura">
 
             <label for="file-upload" class="custom-file-upload">
-                <span class="material-symbols-outlined" style="font-size: 2vw;" *ngIf="!status">
+                <span class="material-symbols-outlined" style="font-size: 2vw;" *ngIf="!status && !info.pending">
                     pending
                 </span>
-                <img src="{{imagePath}}" width="100%" style="overflow: hidden;" *ngIf="status && !pdfDoc">
+
+                <!-- FACTURAS PENDIENTES -->
+                <img [src]="info.img" width="100%" style="overflow: hidden;" *ngIf="info.pending && info.img != ''">
+                <pdf-viewer [src]="info.pdf"
+                            [render-text]="true"
+                            [original-size]="false"
+                            style="width: 100%; height: 100%;"
+                            *ngIf="info.pending && info.img == ''"
+                ></pdf-viewer>
+
+                <!-- FACTURAS A INGRESAR -->
+                <img src="{{imagePath}}" width="100%" style="overflow: hidden;" *ngIf="status && !pdfDoc && !info.pending">
                 <pdf-viewer [src]="documentPath"
                             [render-text]="true"
                             [original-size]="false"
                             style="width: 100%; height: 100%;"
-                            *ngIf="status && pdfDoc"
+                            *ngIf="status && pdfDoc && !info.pending"
                 ></pdf-viewer>
             </label>
-            <input id="file-upload" type="file" multiple (change)="selectBill($event)"/>
+            <input id="file-upload" type="file" multiple (change)="selectBill($event)" *ngIf="!info.pending"/>
 
         </div>
 
@@ -32,6 +43,14 @@
 
             <div id="formulario">
 
+                <div class="label">
+                    USERNAME
+                </div>
+                <input type="text" *ngIf="info.pending" value="{{info.username}}" disabled>
+                <select [(ngModel)]="username_Filter" *ngIf="defaultProfile.rol == 'contador' && !info.pending">
+                    <option *ngFor="let user of listUsers" [value]="user.id_usuario">{{user.username}}</option>
+                </select>
+                
                 <div class="label">
                     DTE
                 </div>
@@ -50,7 +69,9 @@
                 <div class="label">
                     NIT - EMISOR
                 </div>
-                <input type="number" [(ngModel)]="emisor">
+                <select [(ngModel)]="emisor">
+                    <option *ngFor="let empresa of empresas" [value]="empresa.nit">{{empresa.nombre}}</option>
+                </select>
 
                 <div class="label">
                     NIT - RECEPTOR
@@ -66,7 +87,11 @@
 
             <div id="acciones">
 
-                <button  style="background-color: rgb(81, 178, 81);" (click)="addBill()" >
+                <button  style="background-color: rgb(81, 178, 81);" (click)="updateBill()" *ngIf="info.pending">
+                    Aceptar
+                </button>
+
+                <button  style="background-color: rgb(81, 178, 81);" (click)="addBill()" *ngIf="!info.pending">
                     Aceptar
                 </button>
 

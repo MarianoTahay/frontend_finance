@@ -18,10 +18,12 @@ import { AddBillComponent } from '../Dialogs/add-bill/add-bill.component';
 import { ProfileComponent } from '../Dialogs/profile/profile.component';
 import { AddCounterComponent } from '../Dialogs/add-counter/add-counter.component';
 import { AddBillDirectComponent } from '../Dialogs/add-bill-direct/add-bill-direct.component';
+import { AddReportComponent } from '../Dialogs/add-report/add-report.component';
 
 //IMPORTS DE LAS INTERFACES
 import { Profiles } from 'src/app/Interfaces/profiles';
 import { Users } from 'src/app/Interfaces/users';
+import { FacturasPendientes } from 'src/app/Interfaces/facturas-pendientes';
 
 @Component({
   selector: 'app-contador',
@@ -34,6 +36,7 @@ export class ContadorComponent {
   reportes_view: boolean = true;
   usuarios_view: boolean = false;
   facturas_view: boolean = false;
+  pending_view: boolean = false;
 
   listarFacturas_view: boolean = false;
   listarUsuarios_view: boolean = false;
@@ -55,16 +58,17 @@ export class ContadorComponent {
     rol: "",
     id_contador: 0
   }
+  imagePath: string = "http://localhost:3000/static/pic/"
 
   //DATOS PARA PODER MOSTRAR LOS USUARIOS
   usuarios: Usuarios[] = [];
-  arregloUsuarios: string[] = [];
-  arregloEmails: string[] = [];
 
   listUsers: Users[] = [];
 
   //DATOS PARA PODER MOSTRAR LAS FACTURAS
   facturas: Facturas[] = [];
+  facturas_pendientes: FacturasPendientes[] = [];
+  usuarios_pendientes: string[] = [];
   empresas: Empresa[] = [];
 
   //FILTROS EN COMUN
@@ -101,11 +105,15 @@ export class ContadorComponent {
 
       if(this.defaultProfile.rol == "contador") {
         this.facturaService.showBill("", "", "", "", "", "", "", "", this.defaultProfile.id_usuario.toString(), 'ingresada');
-        this.userService.showUser(this.defaultProfile.id_usuario.toString(), "", "", "", "", "", "", "", "");
+        this.userService.getProfiles(this.defaultProfile.id_usuario.toString(), "", "", "", "", "", "", "", "");
       } 
       else{
         this.facturaService.showBill(this.defaultProfile.id_usuario.toString(), "", "", "", "", "", "", "", "", 'ingresada');
       }
+
+      this.facturaService.pending$.subscribe((pendientes) => {
+        this.facturas_pendientes = pendientes;
+      });
       
     });
 
@@ -115,9 +123,6 @@ export class ContadorComponent {
     })
 
     //Obtenemos la lista de usuarios
-
-    
-
     this.userService.listUsers$.subscribe((listUsers) => {
       this.listUsers = listUsers;
     })
@@ -126,10 +131,6 @@ export class ContadorComponent {
     //OBTENEMOS LOS DATOS INICIALES PARA PODER MOSTRAR LOS USUARIOS
     this.userService.usuarios$.subscribe((usuarios) => {
       this.usuarios = usuarios;
-      for(let i = 0; i< this.usuarios.length; i++){
-        this.arregloUsuarios.push(this.usuarios[i].username);
-        this.arregloEmails.push(this.usuarios[i].email);
-      }
     })
 
     this.empresaService.empresas$.subscribe((empresas) => {
@@ -144,6 +145,7 @@ export class ContadorComponent {
     this.reportes_view = true;
     this.usuarios_view = false;
     this.facturas_view = false;
+    this.pending_view = false;
 
     this.listarFacturas_view = false;
     this.listarUsuarios_view = false;
@@ -153,6 +155,7 @@ export class ContadorComponent {
     this.reportes_view = false;
     this.usuarios_view = true;
     this.facturas_view = false;
+    this.pending_view = false;
 
     this.listarFacturas_view = false;
     this.listarUsuarios_view = false;
@@ -162,6 +165,7 @@ export class ContadorComponent {
     this.reportes_view = false;
     this.usuarios_view = false;
     this.facturas_view = true;
+    this.pending_view = false;
 
     this.listarFacturas_view = false;
     this.listarUsuarios_view = false;
@@ -174,6 +178,23 @@ export class ContadorComponent {
     });
   }
 
+  mostrarPending(){
+    this.reportes_view = false;
+    this.usuarios_view = false;
+    this.facturas_view = false;
+    this.pending_view = true;
+
+    this.listarFacturas_view = false;
+    this.listarUsuarios_view = false;
+
+    if(this.defaultProfile.rol == "contador"){
+      this.facturaService.getPendingBills(this.defaultProfile.id_usuario.toString(), "", "", "");
+    }
+    else{
+      this.facturaService.getPendingBills("", this.defaultProfile.id_usuario.toString(), "", "");
+    }
+  }
+
   //FUNCIONES PARA EL TAB DE USUARIOS
   addUser(){
     this.dialog.open(AddUserComponent, {
@@ -184,7 +205,15 @@ export class ContadorComponent {
 
   showUsers(){
 
-    this.userService.showUser(this.defaultProfile.username, this.username_Filter, this.email, this.facturas_min, this.facturas_max, this.total_min, this.total_max, this.orderBy, this.order);
+    if(this.orderBy == "Order By"){
+      this.orderBy = "";
+    }
+
+    if(this.order == "Order"){
+      this.order = "";
+    }
+
+    this.userService.getProfiles(this.defaultProfile.id_usuario.toString(), this.username_Filter, this.email, this.facturas_min, this.facturas_max, this.total_min, this.total_max, this.orderBy, this.order);
 
     this.username_Filter = "";
     this.order = "Order";
@@ -203,6 +232,9 @@ export class ContadorComponent {
       this.dialog.open(AddBillDirectComponent, {
         width: '80%',
         height: '80%',
+        data: {
+          pending: false
+        },
       });
     }
     else{
@@ -233,6 +265,39 @@ export class ContadorComponent {
     this.max = "";
   }
 
+  showPending(){
+    if(this.defaultProfile.rol == "contador"){
+      this.facturaService.getPendingBills(this.defaultProfile.id_usuario.toString(), this.username_Filter, this.date_start, this.date_finish);
+    }
+    else{
+      this.facturaService.getPendingBills("", this.defaultProfile.id_usuario.toString(), this.date_start, this.date_finish);
+    }
+  
+  }
+
+  addPending(img: string, pdf: string, id_usuario: number, username: string, id_factura: number){
+
+    if(img == ""){
+      pdf = "http://localhost:3000/static/documentos/" + pdf
+    }
+    else{
+      img = "http://localhost:3000/static/documentos/" + img
+    }
+
+    this.dialog.open(AddBillDirectComponent, {
+      width: '80%',
+      height: '80%',
+      data: {
+        pending: true,
+        img: img,
+        pdf: pdf,
+        id_usuario: id_usuario,
+        username: username,
+        id_factura: id_factura
+      },
+    });
+  }
+
   deleteBill(dte: string, serie: string){
 
     if(this.defaultProfile.rol != "contador"){
@@ -241,6 +306,7 @@ export class ContadorComponent {
     else{
       this.facturaService.deleteBill("", dte, serie, this.defaultProfile.id_usuario.toString());
     }
+
   }
 
   downloadBill(imagen: string, pdf: string){
@@ -251,6 +317,13 @@ export class ContadorComponent {
     else{
       this.facturaService.downloadBill(imagen);
     }
+  }
+
+  addReport(){
+    this.dialog.open(AddReportComponent, {
+      width: '30%',
+      height: '70%',
+    });
   }
 
   //MOSTRAR EL PERFIL DEL USUARIO

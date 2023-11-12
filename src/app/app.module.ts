@@ -28,6 +28,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 //PIPES
 import { SafePipe } from './Pipe/safe.pipe';
+import { AddReportComponent } from './Components/Dialogs/add-report/add-report.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { SafePipe } from './Pipe/safe.pipe';
     AddBillComponent,
     AddBillDirectComponent,
     SafePipe,
+    AddReportComponent,
   ],
   imports: [
     BrowserModule,

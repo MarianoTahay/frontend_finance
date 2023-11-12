@@ -12,6 +12,7 @@ import axios from 'axios';
 //Imports de las interfaces
 import { Facturas } from '../Interfaces/facturas';
 import { Profiles } from '../Interfaces/profiles';
+import { FacturasPendientes } from '../Interfaces/facturas-pendientes';
 
 //Imports de angular materials
 import { MatDialog } from '@angular/material/dialog';
@@ -46,10 +47,25 @@ export class FacturasService {
   private facturasSubject = new BehaviorSubject<Facturas[]>([]);
   facturas$ = this.facturasSubject.asObservable();
 
+  //Observable: Listado de facturas pendientes
+  private pendingSubject = new BehaviorSubject<FacturasPendientes[]>([]);
+  pending$ = this.pendingSubject.asObservable();
+
   constructor(private router: Router, private userService: UsuariosService, private alerta: DialogsService, private dialog: MatDialog) { 
-     //OBTENEMOS LOS DATOS DE LA SESION ACTUAL
+     
+    //OBTENEMOS LOS DATOS DE LA SESION ACTUAL
      this.userService.profile$.subscribe((profile) => {
       this.defaultProfile = profile;
+
+      //OBTENEMOS FACTURAS PENDINETES
+      if(profile.rol == "contador"){
+        this.showBill("", "", "", "", "", "", "", "", this.defaultProfile.id_usuario.toString(), 'ingresada');
+        this.getPendingBills(profile.id_usuario.toString(), "", "", "");
+      }
+      else{
+        this.showBill(this.defaultProfile.id_usuario.toString(), "", "", "", "", "", "", "", "", 'ingresada');
+        this.getPendingBills("", profile.id_usuario.toString(), "", "");
+      }
     });
 
   }
@@ -88,7 +104,6 @@ export class FacturasService {
       }
       else{
         this.facturasSubject.next(response.data.values);
-        console.log(response.data.values)
       }
     })
   }
@@ -175,7 +190,14 @@ export class FacturasService {
           width: '30%',
           height: '30%'
         });
+
         this.showBill(usuario, "", "", "", "", "", "", "", contador, "ingresada")
+        if(this.defaultProfile.rol == "contador"){
+          this.getPendingBills(this.defaultProfile.id_usuario.toString(), "", "", "");
+        }
+        else{
+          this.getPendingBills("", this.defaultProfile.id_usuario.toString(), "", "");
+        }
       }
     })
   }
@@ -189,6 +211,67 @@ export class FacturasService {
       }
     }).then((response) => {
       console.log("Se esta descargando")
+    })
+  }
+
+  getPendingBills(id_contador: string, id_usuario: string, fecha_min: string, fecha_max: string){
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/bills-pending',
+      data: {
+        id_contador: id_contador,
+        id_usuario: id_usuario,
+        fecha_min: fecha_min,
+        fecha_max: fecha_max
+      }
+    }).then((response) => {
+      if(response.data.status == 0){
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
+      }
+      else{
+        this.pendingSubject.next(response.data.values);
+      }
+    })
+  }
+
+  updateBill(dte: number, serie: string, emisor: number, receptor: number, monto: number, emision: string, id_factura: string){
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/bills-update',
+      data: {
+        dte: dte,
+        serie: serie,
+        emisor: emisor,
+        receptor: receptor,
+        monto: monto,
+        emision: emision,
+        id_factura: id_factura
+      }
+    }).then((response) => {
+      if(response.data.status == 0){
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
+      }
+      else{
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
+        if(this.defaultProfile.rol == "contador"){
+          this.getPendingBills(this.defaultProfile.id_usuario.toString(), "", "", "");
+        }
+        else{
+          this.getPendingBills("", this.defaultProfile.id_usuario.toString(), "", "");
+        }
+      }
     })
   }
 
