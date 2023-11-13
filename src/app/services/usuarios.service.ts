@@ -388,6 +388,61 @@ export class UsuariosService {
     })
   }
 
+  deleteAccount(id_usuario: number){
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/deleteAccount',
+      data: {
+        id_usuario: id_usuario
+      }
+    }).then((response) => {
+      if(response.data.status == 0){
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
+      }
+      else{
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
+
+        this.router.navigate(['']);
+        
+      }
+    })
+  }
+
+  removeClient(id_usuario: number, id_contador: number){
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/removeClient',
+      data: {
+        id_usuario: id_usuario,
+        id_contador: id_contador
+      }
+    }).then((response) => {
+      if(response.data.status == 0){
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
+      }
+      else{
+        this.mensaje(response);
+        this.dialog.open(AlertaComponent, {
+          width: '30%',
+          height: '30%'
+        });
+        
+      }
+    })
+  }
+
   //Esperamos a que se cargue el mensaje.
   async mensaje(response: any){
     const message = await this.alerta.errorSubject.next(response.data.mensaje);

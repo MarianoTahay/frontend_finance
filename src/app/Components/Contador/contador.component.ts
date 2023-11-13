@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { FacturasService } from 'src/app/services/facturas.service';
 import { EmpresasService } from 'src/app/services/empresas.service';
+import { ReportesService } from 'src/app/services/reportes.service';
 
 //IMPORTS PARA LAS INTERFACES
 import { Usuarios } from 'src/app/Interfaces/usuarios';
@@ -24,6 +25,7 @@ import { AddReportComponent } from '../Dialogs/add-report/add-report.component';
 import { Profiles } from 'src/app/Interfaces/profiles';
 import { Users } from 'src/app/Interfaces/users';
 import { FacturasPendientes } from 'src/app/Interfaces/facturas-pendientes';
+import { Reportes } from 'src/app/Interfaces/reportes';
 
 @Component({
   selector: 'app-contador',
@@ -92,8 +94,12 @@ export class ContadorComponent {
 
   documentPath: string = "http://localhost:3000/static/documentos/"
 
+  //LISTA DE REPORTES
+  reportes: Reportes[] = [];
+  reportePath: string = "http://localhost:3000/static/reports/"
+
   
-  constructor(private userService: UsuariosService, private facturaService: FacturasService, private router: Router, private dialog: MatDialog, private empresaService: EmpresasService) { }
+  constructor(private userService: UsuariosService, private facturaService: FacturasService, private router: Router, private dialog: MatDialog, private empresaService: EmpresasService, private reporteService: ReportesService) { }
 
   ngOnInit(){
 
@@ -113,6 +119,10 @@ export class ContadorComponent {
 
       this.facturaService.pending$.subscribe((pendientes) => {
         this.facturas_pendientes = pendientes;
+      });
+
+      this.reporteService.reportes$.subscribe((reportes) => {
+        this.reportes = reportes;
       });
       
     });
@@ -322,8 +332,26 @@ export class ContadorComponent {
   addReport(){
     this.dialog.open(AddReportComponent, {
       width: '30%',
-      height: '70%',
+      height: '90%',
     });
+  }
+
+  showReportes(){
+    if(this.defaultProfile.rol == "contador"){
+      this.reporteService.getReportes(this.defaultProfile.id_usuario.toString(), this.username_Filter, this.date_start, this.date_finish);
+    }
+    else{
+      this.reporteService.getReportes("", this.defaultProfile.id_usuario.toString(), this.date_start, this.date_finish);
+    }
+  }
+
+  deleteReport(id_reporte: number){
+    this.reporteService.deleteReport(id_reporte);
+
+  }
+
+  removeClient(id_usuario: number){
+    this.userService.removeClient(id_usuario, this.defaultProfile.id_usuario);
   }
 
   //MOSTRAR EL PERFIL DEL USUARIO

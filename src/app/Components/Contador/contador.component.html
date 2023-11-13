@@ -52,7 +52,7 @@
                 Facturas
             </div>
 
-			<div class="opciones" (click)="mostrarPending()">
+			<div class="opciones" (click)="mostrarPending()" *ngIf="defaultProfile.rol != 'usuario'">
 
                 <span class="material-symbols-outlined">
                     pending_actions
@@ -105,11 +105,11 @@
 				</div>
 
 				<div class="filtro">
-					<button  style="background-color: rgb(81, 178, 81);" (click)="showPending()">Search</button>
+					<button  style="background-color: rgb(81, 178, 81);" (click)="showReportes()">Search</button>
 				</div>
 
 				<div class="filtro">
-					<button style="background-color: rgb(144, 136, 209);" (click)="addReport()">Agregar</button>
+					<button style="background-color: rgb(144, 136, 209);" (click)="addReport()" *ngIf="defaultProfile.rol == 'contador'">Agregar</button>
 				</div>
 
 				<div class="filtro" style="visibility: hidden;"></div>
@@ -120,16 +120,20 @@
 
 			<div class="lista">
 
-				<div id="reportes">
+				<div id="reportes" *ngFor="let item of reportes">
 
 					<div id="reporte">
 
 						<p>
-							<b>Username:</b>
+							<b>Username:</b> {{item.username}}
 						</p>
 
 						<p>
-							<b>Fecha:</b>
+							<b>Fecha:</b> {{item.fecha}}
+						</p>
+
+						<p>
+							<b>Nota:</b> {{item.mensaje}}
 						</p>
 
 					</div>
@@ -137,14 +141,14 @@
 					<div id="acciones">
 
 						<!-- BORRAR REPORTE -->
-						<button style="background-color: #dc3545; width: 30%;">
+						<button style="background-color: #dc3545; width: 30%;" (click)="deleteReport(item.id_reporte)" *ngIf="defaultProfile.rol == 'contador'">
 							<span class="material-symbols-outlined">
 								delete
 							</span>
 						</button>
 
 						<!-- VER REPORTE -->
-						<a target="_blank" style="background-color: #48b8ce; width: 30%;" download>
+						<a href="{{reportePath + item.archivo}}" target="_blank" style="background-color: #48b8ce; width: 30%;">
 							<span class="material-symbols-outlined">
 								visibility
 							</span>
@@ -253,7 +257,7 @@
 					</div>
 
 					<div id="acciones">
-						<button style="background-color: #dc3545; width: 30%;">
+						<button style="background-color: #dc3545; width: 30%;" (click)="removeClient(user.id_usuario)">
 							<span class="material-symbols-outlined">
 								delete
 							</span>
@@ -441,7 +445,7 @@
 					</div>
 
 					<div id="acciones">
-						<button style="background-color: rgb(81, 178, 81); width: 30%;" (click)="addPending(item.imagen, item.pdf, item.id_usuario, item.username, item.id_factura)">
+						<button style="background-color: rgb(81, 178, 81); width: 30%;" (click)="addPending(item.imagen, item.pdf, item.id_usuario, item.username, item.id_factura)" *ngIf="defaultProfile.rol == 'contador'">
 							<span class="material-symbols-outlined">
 								add
 							</span>

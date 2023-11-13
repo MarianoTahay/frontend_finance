@@ -45,7 +45,11 @@
             </div>
 
             <div id="actions">
-                <button style="background-color: rgb(255, 85, 85);" (click)="logout()">Logout</button>
+                <button style="background-color: rgb(255, 85, 85);" (click)="logout()">
+                    <span class="material-symbols-outlined">
+                        logout
+                    </span>
+                </button>
                 <button  style="background-color: #48b8ce;" (click)="mostrarSave()" *ngIf="!save">
                     <span class="material-symbols-outlined">
                         edit
@@ -54,6 +58,11 @@
                 <button  style="background-color: rgb(81, 178, 81);" *ngIf="save" (click)="saveChanges()">
                     <span class="material-symbols-outlined">
                         save
+                    </span>
+                </button>
+                <button  style="background-color: rgb(255, 85, 85);" *ngIf="save" (click)="deleteAccount()">
+                    <span class="material-symbols-outlined">
+                        delete
                     </span>
                 </button>
             </div>

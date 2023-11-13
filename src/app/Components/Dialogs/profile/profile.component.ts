@@ -130,4 +130,10 @@ export class ProfileComponent {
     }
   }
 
+  deleteAccount(){
+    this.userService.userStatus("Nlogged", this.defaultProfile.email);
+    this.userService.deleteAccount(this.defaultProfile.id_usuario);
+    this.dialog.closeAll();
+  }
+
 }

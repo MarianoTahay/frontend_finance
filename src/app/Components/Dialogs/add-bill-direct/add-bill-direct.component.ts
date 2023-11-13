@@ -82,6 +82,8 @@ export class AddBillDirectComponent {
       this.empresas = empresas;
     })
 
+    console.log(this.info.pending)
+
   }
 
   selectBill(event: Event){
@@ -90,7 +92,7 @@ export class AddBillDirectComponent {
     if(input.files && input.files.length > 0){
       this.data = input.files[0];
 
-      if(this.data.name.split('.').pop() == "jpg" || this.data.name.split('.').pop() == "png"  || this.data.name.split('.').pop() == "pdf"){
+      if(this.data.name.split('.').pop() == "jpg" || this.data.name.split('.').pop() == "png"  || this.data.name.split('.').pop() == "pdf" || this.data.name.split('.').pop() == "jpeg"){
 
         this.status = true;
 

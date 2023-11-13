@@ -32,21 +32,27 @@
 
         <div id="opciones">
 
-            <select>
-                <option *ngFor="let user of listUsers" [value]="user.id_usuario">{{user.username}}</option>
-            </select>
+            <div class="seccion">
+                <input type="text" [(ngModel)]="titulo" placeholder="Mensaje" style="width: 70%;">
+            </div>
 
-            <button style="background-color: rgb(81, 178, 81);">
-                <span class="material-symbols-outlined">
-                    send
-                </span>
-            </button>
-
-            <button style="background-color: rgb(255, 85, 85);" mat-dialog-close="">
-                <span class="material-symbols-outlined">
-                    close
-                </span>
-            </button>
+            <div class="seccion">
+                <select [(ngModel)]="id_usuario">
+                    <option *ngFor="let user of listUsers" [value]="user.id_usuario">{{user.username}}</option>
+                </select>
+    
+                <button style="background-color: rgb(81, 178, 81);" (click)="addReport()">
+                    <span class="material-symbols-outlined">
+                        send
+                    </span>
+                </button>
+    
+                <button style="background-color: rgb(255, 85, 85);" mat-dialog-close="">
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </button>
+            </div>
 
         </div>
 

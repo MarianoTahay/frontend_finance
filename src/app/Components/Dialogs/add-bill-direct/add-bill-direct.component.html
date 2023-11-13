@@ -43,10 +43,11 @@
 
             <div id="formulario">
 
-                <div class="label">
+                <div class="label" *ngIf="defaultProfile.rol != 'usuario'">
                     USERNAME
                 </div>
                 <input type="text" *ngIf="info.pending" value="{{info.username}}" disabled>
+
                 <select [(ngModel)]="username_Filter" *ngIf="defaultProfile.rol == 'contador' && !info.pending">
                     <option *ngFor="let user of listUsers" [value]="user.id_usuario">{{user.username}}</option>
                 </select>
@@ -76,7 +77,7 @@
                 <div class="label">
                     NIT - RECEPTOR
                 </div>
-                <input type="number" [(ngModel)]="receptor">
+                <input type="text" [(ngModel)]="receptor">
 
                 <div class="label">
                     MONTO

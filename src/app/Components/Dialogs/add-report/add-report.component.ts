@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 //IMPORT DE SERVICIOS
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { DialogsService } from 'src/app/services/dialogs.service';
+import { ReportesService } from 'src/app/services/reportes.service';
 
 //IMPORT DE COMPONENETES
 import { AlertaComponent } from '../alerta/alerta.component';
@@ -13,6 +14,8 @@ import { AlertaComponent } from '../alerta/alerta.component';
 //IMPORT DE INTERFACES
 import { Profiles } from 'src/app/Interfaces/profiles';
 import { Users } from 'src/app/Interfaces/users';
+
+const fechaActual: Date = new Date();
 
 @Component({
   selector: 'app-add-report',
@@ -45,10 +48,17 @@ export class AddReportComponent {
   status: boolean = false;
   mensaje: string = "Seleccione el reporte"
 
-  archivo: File | null = null;
   reportPath: string = "";
 
-  constructor(private userService: UsuariosService, private dialog: MatDialog, private alerta: DialogsService){
+  titulo: string = "";
+
+  //Informacion del reporte
+  id_usuario: string = "";
+  archivo: string = "";
+  fecha: string = fechaActual.getFullYear() + '/' + (fechaActual.getMonth() + 1) + '/' + (fechaActual.getDay() + 1);
+  file: File | null = null;
+
+  constructor(private userService: UsuariosService, private dialog: MatDialog, private alerta: DialogsService, private reportService: ReportesService){
 
     //OBTENEMOS LOS DATOS DE LA SESION ACTUAL
     this.userService.profile$.subscribe((profile) => {
@@ -66,12 +76,12 @@ export class AddReportComponent {
     const input = event.target as HTMLInputElement;
 
     if(input.files && input.files.length > 0){
-      this.archivo = input.files[0];
+      this.file = input.files[0];
 
-      if(this.archivo.name.split('.').pop() == "pdf"){
+      if(this.file.name.split('.').pop() == "pdf"){
         this.status = true;
-        this.reportPath = URL.createObjectURL(this.archivo);
-        console.log(this.archivo.name)
+        this.archivo = this.file.name;
+        this.reportPath = URL.createObjectURL(this.file);
       }
       else{
         this.status = false;
@@ -79,7 +89,7 @@ export class AddReportComponent {
           this.dialog.open(AlertaComponent, {
             width: '30%',
             height: '30%'
-          });
+        });
       }
       
     }
@@ -87,4 +97,21 @@ export class AddReportComponent {
       console.log("No hay archivos seleccionados");
     } 
   }
+
+
+  addReport(){
+
+    if(this.file){
+      this.reportService.addReport(parseInt(this.id_usuario), this.archivo, this.fecha, this.file, this.titulo);
+    }
+    else{
+      this.alerta.errorSubject.next("Seleccine un archivo")
+      this.dialog.open(AlertaComponent, {
+        width: '30%',
+        height: '30%'
+      });
+    }
+
+  }
+
 }

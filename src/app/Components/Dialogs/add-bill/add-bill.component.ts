@@ -63,7 +63,7 @@ export class AddBillComponent {
 
     if(input.files){
       for(let i = 0; i < input.files.length; i++){  
-        if(input.files[i].name.split('.').pop() == "jpg" || input.files[i].name.split('.').pop() == "png" || input.files[i].name.split('.').pop() == "pdf"){
+        if(input.files[i].name.split('.').pop() == "jpg" || input.files[i].name.split('.').pop() == "png" || input.files[i].name.split('.').pop() == "pdf" || input.files[i].name.split('.').pop() == "jpeg"){
           this.status = true;
           this.mensaje = "Factura(s) lista(s)"
 
@@ -88,7 +88,7 @@ export class AddBillComponent {
 
   }
 
-  async sendBills(){
+  sendBills(){
 
     for(let i = 0; i < this.archivos.length; i++){
 
@@ -102,9 +102,10 @@ export class AddBillComponent {
       }
 
       const fechaActual: Date = new Date();
-      const fecha = fechaActual.getFullYear() + '/' + fechaActual.getMonth() + '/' + fechaActual.getDay()
+      const fecha = fechaActual.getFullYear() + '/' + (fechaActual.getMonth() + 1) + '/' + (fechaActual.getDay() + 1)
+      console.log(fecha)
 
-      await this.billService.addBill((Math.floor(Math.random() * (1000 - 0)) + 0).toString(), ((Math.floor(Math.random() * (1000 - 0)) + 0)).toString(), "0", "0", "0", fecha, this.defaultProfile.id_usuario, this.imagen, this.pdf, "pendiente", this.archivos[i]);
+      this.billService.addBill((Math.floor(Math.random() * (1000 - 0)) + 0).toString(), ((Math.floor(Math.random() * (1000 - 0)) + 0)).toString(), "0", "0", "0", fecha, this.defaultProfile.id_usuario, this.imagen, this.pdf, "pendiente", this.archivos[i]);
 
       if(this.defaultProfile.rol == "contador"){
         this.billService.getPendingBills(this.defaultProfile.id_usuario.toString(), "", "", "");
